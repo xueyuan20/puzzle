@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity" >
+    <xy.game.puzzle.view.PuzzleSurfaceView
+        android:id="@+id/puzzle_surfaceview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+	<TextView android:id="@+id/tv_original_background"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:padding="@dimen/icon_div"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignBottom="@+id/tv_steps"
+        android:background="@drawable/selector_original_bk"/>
+
+	<TextView
+        android:id="@+id/tv_steps"
+        android:gravity="bottom|center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_border_top"
+        android:textSize="30sp"
+        android:textColor="#AA333333"
+        android:text="@string/title_steps" />
+	<TextView
+	    android:id="@+id/tv_timer"
+	    android:gravity="center"
+	    android:layout_below="@id/tv_steps"
+	    android:layout_height="@dimen/timer_height"
+	    android:layout_width="fill_parent"
+	    android:textSize="16sp"
+        android:textColor="#55333333"
+        android:text="@string/title_timer" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/top_border_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal" >
+        <TextView android:id="@+id/tv_game_level"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_margin="@dimen/icon_div"
+            android:background="@drawable/selector_game_level"
+            android:entries="@array/game_level_choices"
+            android:entryValues="@array/game_level_values"
+            android:dialogTitle="@string/title_game_level"/>
+        <TextView android:id="@+id/tv_set_background"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_margin="@dimen/icon_div"
+            android:background="@drawable/selector_set_background"
+            android:entries="@array/picture_res_choices"
+            android:entryValues="@array/picture_res_values"
+            android:dialogTitle="@string/title_set_picture"/>
+
+        <TextView android:id="@+id/tv_game_restart"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_margin="@dimen/icon_div"
+            android:background="@drawable/selector_restart"/>
+
+	    <TextView android:id="@+id/tv_game_settings"
+	        android:layout_width="@dimen/icon_size"
+	        android:layout_height="@dimen/icon_size"
+	        android:layout_margin="@dimen/icon_div"
+	        android:background="@drawable/selector_settings"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="top_border_height">120dip</dimen>
+    <dimen name="left_border_width">20dip</dimen>
+    <dimen name="icon_size">48dip</dimen>
+    <dimen name="icon_div">16dip</dimen>
+    <dimen name="title_border_top">80dip</dimen>
+    <dimen name="timer_height">40dip</dimen>
+
+    <!-- Puzzle Grid border -->
+    <dimen name="puzzle_grid_border">5dip</dimen>
+
+    <!-- Font -->
+    <dimen name="font_zise">40sp</dimen>
+</resources>

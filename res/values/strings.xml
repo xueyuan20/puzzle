@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">"滑块拼图"</string>
+    <string name="action_settings">"设置"</string>
+    <string name="hello_world">"欢迎使用!"</string>
+
+    <string name="title_steps">"步数 : %1$d "</string>
+    <string name="title_timer">"耗时"</string>
+    <string name="title_score">"总分 : "</string>
+    <string name="title_game_level">"请选择游戏等级"</string>
+    <string-array name="game_level_choices">
+        <item >"初级"</item>
+        <item >"中级"</item>
+        <item >"高级"</item>
+    </string-array>
+
+    <string-array name="game_level_values">
+        <item >"初级"</item>
+        <item >"中级"</item>
+        <item >"高级"</item>
+    </string-array>
+
+    <string name="title_set_picture">"设置拼板背景图"</string>
+    <string-array name="picture_res_choices">
+        <item >"拍照"</item>
+        <item >"相册"</item>
+    </string-array>
+
+    <string-array name="picture_res_values">
+        <item >"拍照"</item>
+        <item >"相册"</item>
+    </string-array>
+
+    <string name="ok">"确定"</string>
+    <string name="cancle">"取消"</string>
+</resources>
