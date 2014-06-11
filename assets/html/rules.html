@@ -1,0 +1,43 @@
+<html>
+    <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>应用描述</title>
+        <style type="text/css">
+            body { margin-top: 0px; padding-top: 5px; padding-left: 5px; padding-right: 5px;}
+            h2   { margin-top: 5px; padding-top: 0px; }
+        </style>
+        <style> body{background-color:#E0E0E0} </style>
+
+        <body>
+			</br>
+			<h1>滑块拼图</h1>
+			<p>重温儿时小游戏，单人游戏。</p>
+            <h2>一、功能：</h2>
+            <ol>
+<li>设置：<ul><li>设置难度等级;<li>开始新游戏; <li>自动保存游戏;<li>设置原图</ul>
+<li>游戏：<ul><li>游戏规则;<li>进行游戏；<li>计时；<li>算分；<li>分享；</ul>
+<li>辅助：<ul><li>应用介绍;<li>版本更新;<li>用户反馈</ul>
+</ol>
+<h2>二、游戏规则：</h2>
+<ul>
+<li>游戏难度等级：<ul><li>初级：3*3<li>中级：4*4<li>高级：5*5</ul>
+</br>
+<li>设置原图：<ul><li>应用程序默认为数字拼图(3*3矩阵、4*4矩阵、5*5矩阵)，分别对应3个等级；
+<li>玩家可选择使用默认数字拼图，或从相机/相册中获取图片</ul>
+</br>
+<li>游戏规则：
+<ol>
+<li>图片被切分为N*N块（N值由等级决定）；应用将N*N-1块图片随机打乱顺序，显示在N*N-1个方格中，剩余的1个空格作为活动格；
+<li>用户向上滑动屏幕，空格下方小图块移动到此处，原图块位置变为新的活动格；
+<li>用户向下滑动屏幕，空格上方小图块移动到此处，原图块位置变为新的活动格；
+<li>用户向左滑动屏幕，空格右方小图块移动到此处，原图块位置变为新的活动格；
+<li>用户向右滑动屏幕，空格左方小图块移动到此处，原图块位置变为新的活动格；
+</ol>
+</br>
+<li>计分规则：<p><code>总分=级别*function1(时间)*function2(步数)</p>
+<ol>其中，</br>function1(时间)，要求时间越短，分数越高；</br>function2(步数)频数越少，分数越高；</ol>
+</ul>
+<h2>三、胜出条件：</h2>
+            <p>当图块构成原图（空格处除外），表示玩家已经完成游戏。</p>
+        </body>
+    </head>
+</html>

@@ -1,13 +1,18 @@
-package xy.game.puzzle;
+package xy.game.puzzle.activity;
 
+import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.util.MessageUtils;
+import xy.game.puzzle.util.ScreenShot;
 import xy.game.puzzle.view.PuzzleSurfaceView;
 import xy.game.puzzle.view.PuzzleSurfaceView.DIFFICULTY_LEVEL;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements OnClickListener{
+public class MainActivity extends Activity implements OnClickListener {
 	private TextView mTvOriginalBmp;
 	private TextView mTvSteps, mTvTimer;
 	private TextView mTvSetLevel, mTvSetBg, mTvRestart, mTvSettings;
@@ -26,31 +31,49 @@ public class MainActivity extends Activity implements OnClickListener{
 	private PuzzleSurfaceView mPuzzleView;
 
 	private Resources mRes;
+	private Context mContext;
 	private boolean mEnableTimer;
+	private String mResultContent = "";	
 
-	private Handler mHandler = new Handler(){
+	private Handler mHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			switch (msg.what) {
 			case MessageUtils.MSG_UPDATE_STEPS:
-				mTvSteps.setText(String.format(mRes.getString(R.string.title_steps),
+				mTvSteps.setText(String.format(mRes
+						.getString(R.string.title_steps),
 						msg.getData().getInt(MessageUtils.KEY_STEPS)));
 				break;
 
 			case MessageUtils.MSG_RESULT:
-				new AlertDialog.Builder(MainActivity.this)
-		        .setTitle("成功")
-		        .setMessage("成功")
-		        .setPositiveButton("确定", null)
-		        .setIcon(android.R.drawable.ic_dialog_info)
-		        .show();
+				mResultContent = msg.getData().getString(MessageUtils.KEY_RESULT_CONTENT);
+				new AlertDialog.Builder(MainActivity.this).setTitle(
+						mRes.getString(R.string.result_title))
+						.setMessage(mResultContent)
+						.setNegativeButton(mRes.getString(R.string.share),
+								new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								// TODO Auto-generated method stub
+								ScreenShot.shareMsg(mContext,
+										getTitle().toString(),
+										mRes.getString(R.string.share),
+										String.format(mRes.getString(R.string.share_content),
+												mRes.getString(R.string.app_name),
+												mResultContent), null);
+							}
+						}).setPositiveButton(mRes.getString(R.string.ok), null)
+						.setIcon(getResources().getDrawable(
+								R.drawable.ic_launcher)).show();
 				break;
 
 			case MessageUtils.MSG_CHANGE_LEVEL:
 				int level = msg.getData().getInt(MessageUtils.KEY_GAME_LEVEL);
-				PuzzleProvider.getInstance(MainActivity.this).setGameLevel(level);
+				PuzzleProvider.getInstance(MainActivity.this).setGameLevel(
+						level);
 				switch (level) {
 				case 0:
 					mPuzzleView.setLevel(DIFFICULTY_LEVEL.SIMPLE);
@@ -73,8 +96,8 @@ public class MainActivity extends Activity implements OnClickListener{
 				sendEmptyMessageDelayed(MessageUtils.MSG_START_TIMER, 1000);
 				if (mEnableTimer) {
 					int timer = mPuzzleView.getTimerCount();
-					mTvTimer.setText(String.format("%02d:%02d:%02d", timer/(60*60),
-							(timer/60)%60, timer%60));
+					mTvTimer.setText(String.format("%02d:%02d:%02d", timer
+							/ (60 * 60), (timer / 60) % 60, timer % 60));
 					mPuzzleView.updateTimerCount();
 				}
 				break;
@@ -93,33 +116,34 @@ public class MainActivity extends Activity implements OnClickListener{
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
 		mRes = getResources();
+		mContext = this;
 
 		initViews();
 	}
 
 	private void initViews() {
 		// TODO Auto-generated method stub
-		mPuzzleView = (PuzzleSurfaceView)findViewById(R.id.puzzle_surfaceview);
+		mPuzzleView = (PuzzleSurfaceView) findViewById(R.id.puzzle_surfaceview);
 
-		mTvOriginalBmp = (TextView)findViewById(R.id.tv_original_background);
+		mTvOriginalBmp = (TextView) findViewById(R.id.tv_original_background);
 		mTvOriginalBmp.setOnClickListener(this);
 
-		mTvSteps = (TextView)findViewById(R.id.tv_steps);
+		mTvSteps = (TextView) findViewById(R.id.tv_steps);
 		mTvSteps.setText(String.format(mRes.getString(R.string.title_steps), 0));
 
-		mTvTimer = (TextView)findViewById(R.id.tv_timer);
+		mTvTimer = (TextView) findViewById(R.id.tv_timer);
 		mTvTimer.setText("00:00");
 
-		mTvSetLevel = (TextView)findViewById(R.id.tv_game_level);
+		mTvSetLevel = (TextView) findViewById(R.id.tv_game_level);
 		mTvSetLevel.setOnClickListener(this);
 
-		mTvSetBg = (TextView)findViewById(R.id.tv_set_background);
+		mTvSetBg = (TextView) findViewById(R.id.tv_set_background);
 		mTvSetBg.setOnClickListener(this);
 
-		mTvRestart = (TextView)findViewById(R.id.tv_game_restart);
+		mTvRestart = (TextView) findViewById(R.id.tv_game_restart);
 		mTvRestart.setOnClickListener(this);
 
-		mTvSettings = (TextView)findViewById(R.id.tv_game_settings);
+		mTvSettings = (TextView) findViewById(R.id.tv_game_settings);
 		mTvSettings.setOnClickListener(this);
 
 		mHandler.sendEmptyMessage(MessageUtils.MSG_START_TIMER);
@@ -137,32 +161,39 @@ public class MainActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch (view.getId()) {
 		case R.id.tv_original_background:
-			
+			startActivity(new Intent(MainActivity.this, PreviewActivity.class));
 			break;
 
 		case R.id.tv_game_level:
 			new AlertDialog.Builder(MainActivity.this)
-			.setTitle(mRes.getString(R.string.title_game_level))
-			.setIcon(mRes.getDrawable(R.drawable.selector_game_level))
-			.setSingleChoiceItems(mRes.getStringArray(R.array.game_level_choices),
-					PuzzleProvider.getInstance(this).getGameLevel(),
-					new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dlg, int index) {
-					// TODO Auto-generated method stub
-					Message msg = new Message();
-					msg.what = MessageUtils.MSG_CHANGE_LEVEL;
-					msg.getData().putInt(MessageUtils.KEY_GAME_LEVEL, index);
-					mHandler.dispatchMessage(msg);
-					dlg.dismiss();
-				}
-			}).show();
+					.setTitle(mRes.getString(R.string.title_game_level))
+					.setIcon(mRes.getDrawable(R.drawable.selector_game_level))
+					.setSingleChoiceItems(
+							mRes.getStringArray(R.array.game_level_choices),
+							PuzzleProvider.getInstance(this).getGameLevel(),
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dlg,
+										int index) {
+									// TODO Auto-generated method stub
+									Message msg = new Message();
+									msg.what = MessageUtils.MSG_CHANGE_LEVEL;
+									msg.getData().putInt(
+											MessageUtils.KEY_GAME_LEVEL, index);
+									mHandler.dispatchMessage(msg);
+									dlg.dismiss();
+								}
+							}).show();
 
 			break;
 
 		case R.id.tv_set_background:
-			
+			String path = ScreenShot.getAndSaveCurrentImage(mPuzzleView.getScreenWidth(),
+					mPuzzleView.getScreenHeight(), this, mPuzzleView.getScreenshot());
+			Intent intent = new Intent(Intent.ACTION_VIEW);    
+            intent.setDataAndType(Uri.parse("file://"+path), "image/*");
+            startActivity(Intent.createChooser(intent, path));
 			break;
 
 		case R.id.tv_game_restart:
@@ -170,7 +201,7 @@ public class MainActivity extends Activity implements OnClickListener{
 			break;
 
 		case R.id.tv_game_settings:
-			
+			startActivity(new Intent(MainActivity.this, AboutActivity.class));
 			break;
 
 		default:
@@ -178,7 +209,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		}
 	}
 
-	public final Handler getHandler(){
+	public final Handler getHandler() {
 		return mHandler;
 	}
 
@@ -190,7 +221,7 @@ public class MainActivity extends Activity implements OnClickListener{
 			// TODO Auto-generated constructor stub
 			this.mTimer = tvTimer;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
@@ -218,11 +249,11 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	}
 
-	public void startTimer(){
+	public void startTimer() {
 		mEnableTimer = true;
 	}
 
-	public void stopTimer(){
+	public void stopTimer() {
 		mEnableTimer = false;
 	}
 }

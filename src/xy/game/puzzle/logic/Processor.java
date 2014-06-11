@@ -10,7 +10,7 @@ import java.util.Random;
 public class Processor {
 
 	private static int[] mIndexArray;
-	private static final int LOOP_COUNT = 200;
+	private static final int LOOP_COUNT = 160;
 	/**
 	 * Generator random sequences.
 	 * @param length, length of sequences.

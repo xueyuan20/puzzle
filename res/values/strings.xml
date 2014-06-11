@@ -8,6 +8,10 @@
     <string name="title_steps">"步数 : %1$d "</string>
     <string name="title_timer">"耗时"</string>
     <string name="title_score">"总分 : "</string>
+    <string name="result_title">"任务完成"</string>
+    <string name="result_content">"得分：%1$d\r\n耗时：%2$s\r\n步数：%3$d"</string>
+    <string name="share_content">"我正在玩\"%1$s\",快来试试吧～\r\n%2$s"</string>
+
     <string name="title_game_level">"请选择游戏等级"</string>
     <string-array name="game_level_choices">
         <item >"初级"</item>
@@ -22,6 +26,7 @@
     </string-array>
 
     <string name="title_set_picture">"设置拼板背景图"</string>
+
     <string-array name="picture_res_choices">
         <item >"拍照"</item>
         <item >"相册"</item>
@@ -32,6 +37,15 @@
         <item >"相册"</item>
     </string-array>
 
+    <string name="delete">"删除"</string>
+    <string name="share">"分享"</string>
     <string name="ok">"确定"</string>
     <string name="cancle">"取消"</string>
+
+    <string name="appdescription">"应用描述"</string>
+    <string name="preview">"原图"</string>
+    <string name="udpate">"检查更新"</string>
+    <string name="about">"关于"</string>
+    <string name="feedback">"用户反馈"</string>
+
 </resources>

@@ -1,7 +1,7 @@
 package xy.game.puzzle.view;
 
-import xy.game.puzzle.MainActivity;
 import xy.game.puzzle.R;
+import xy.game.puzzle.activity.MainActivity;
 import xy.game.puzzle.logic.InitPuzzleTask;
 import xy.game.puzzle.logic.Processor;
 import xy.game.puzzle.logic.PuzzleProvider;
@@ -11,6 +11,7 @@ import xy.game.puzzle.util.Position;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -27,6 +28,7 @@ import android.view.SurfaceView;
 
 public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		Runnable {
+	private Bitmap mBitmap;
 
 	/**
 	 * 难度级别
@@ -160,25 +162,30 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 
 	/**
 	 * draw views on the surfaceView.
+	 * ???? Differences between SurfaceView and view
 	 */
 	private void drawViews() {
 		// TODO Auto-generated method stub
 		try {
 			mCanvas = mHolder.lockCanvas();
+			Canvas canvas = new Canvas(mBitmap);
 			if (mCanvas != null) {
 				// 绘制背景
 				mCanvas.drawColor(Color.argb(0xFF, 0xF8, 0xF3, 0xD1));// 米白色背景
+				canvas.drawColor(Color.argb(0xFF, 0xF8, 0xF3, 0xD1));// 米白色背景
 				// 绘制拼板
 				mPaint.setColor(Color.DKGRAY);
 				mPaint.setAlpha(0x55);
 				mPaint.setStyle(Style.FILL);
 				mCanvas.drawRect(mPuzzleRect, mPaint);
+				canvas.drawRect(mPuzzleRect, mPaint);
 
 				// 绘制图片网格
 				mPaint.setColor(Color.argb(0x55, 0xF8, 0xF3, 0xD1));
 				mPaint.setStyle(Style.FILL);
 				for (int i = 0; i < mUnitRectArray.length; i++) {
 					mCanvas.drawRect(mUnitRectArray[i].getRect(), mPaint);
+					canvas.drawRect(mUnitRectArray[i].getRect(), mPaint);
 				}
 
 				// 绘制number
@@ -194,21 +201,28 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 									mUnitRectArray[i].getRect().centerY()
 									+ mPaint.getTextSize()/3,
 									mPaint);
+							canvas.drawText(String.valueOf(mUnitIndexArray[i]),
+									mUnitRectArray[i].getRect().centerX(),
+									mUnitRectArray[i].getRect().centerY()
+									+ mPaint.getTextSize()/3,
+									mPaint);
 						}
 					}
 
 					// 绘制图块
 					if (mBmpPaint!=null && mBmpPaint.length>0) {
-						LogUtil.e("Unsurportted!");
+//						LogUtil.e("Unsurportted!");
 					}
 				}
+				
 
 			}
+			canvas = null;
 		} catch (Exception e) {
 			// TODO: handle exception
 			LogUtil.printCodeStack(e);
 		} finally {
-			if (mCanvas != null) {				
+			if (mCanvas != null) {
 				mHolder.unlockCanvasAndPost(mCanvas);
 			}
 		}
@@ -226,6 +240,8 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		// TODO Auto-generated method stub
 		mScreenWidth = getWidth();
 		mScreenHeight = getHeight();
+		mBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight,
+				Config.ARGB_8888);
 		// 初始化拼板
 		initPuzzle(false);
 		mUpdateEnable = true;
@@ -236,6 +252,10 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
 		mUpdateEnable = false;
+		if (mBitmap!=null) {
+			mBitmap.recycle();
+			mBitmap = null;
+		}
 	}
 
 	/**
@@ -248,6 +268,10 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			mMotionStartPos = new Position(event.getX(), event.getY());
+			break;
+
+		case MotionEvent.ACTION_MOVE:
+			
 			break;
 
 		case MotionEvent.ACTION_UP:
@@ -311,7 +335,16 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 			}
 			mMotionStartPos = null;
 			if (Processor.isOrder(mUnitIndexArray)) {
-				((MainActivity)mContext).getHandler().sendEmptyMessage(MessageUtils.MSG_RESULT);
+				String content = String.format(mRes.getString(R.string.result_content),
+						Processor.caculateScore(mPuzzleSize, mTimerCount, mStepCount),
+						String.format("%02d:%02d:%02d", mTimerCount/(60 * 60),
+								(mTimerCount / 60) % 60, mTimerCount % 60),
+						mStepCount);
+				Message msg = new Message();
+				msg.what = MessageUtils.MSG_RESULT;
+				msg.getData().putString(MessageUtils.KEY_RESULT_CONTENT,
+						content);
+				((MainActivity)mContext).getHandler().dispatchMessage(msg);
 			}
 			break;
 
@@ -546,16 +579,46 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		initPuzzle(true);
 	}
 
+	/**
+	 * Reset Time Counter.
+	 */
 	private void resetTimer(){
 		mTimerCount = 0;
 		((MainActivity)mContext).startTimer();
 	}
 
+	/**
+	 * Get Timer Count.
+	 * @return
+	 */
 	public int getTimerCount(){
 		return mTimerCount;
 	}
 
+	/**
+	 * Update Timer.
+	 */
 	public void updateTimerCount(){
 		mTimerCount++;
+	}
+
+	/**
+	 * Get Screen Width
+	 * @return
+	 */
+	public int getScreenWidth(){
+		return mScreenWidth;
+	}
+
+	/**
+	 * Get Screen Height
+	 * @return
+	 */
+	public int getScreenHeight(){
+		return mScreenHeight;
+	}
+
+	public Bitmap getScreenshot(){
+		return mBitmap;
 	}
 }
