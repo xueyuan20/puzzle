@@ -291,7 +291,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 							+ mPuzzleSize];
 					mUnitIndexArray[mSpaceIndex + mPuzzleSize] = 0;
 					mSpaceIndex = mSpaceIndex + mPuzzleSize;
-					updateSteps();
+					addSteps();
 				} else {
 					LogUtil.e("Cannot Move from bottom!");
 				}
@@ -305,7 +305,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 							- mPuzzleSize];
 					mUnitIndexArray[mSpaceIndex - mPuzzleSize] = 0;
 					mSpaceIndex = mSpaceIndex - mPuzzleSize;
-					updateSteps();
+					addSteps();
 				}
 				break;
 
@@ -316,7 +316,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 					mUnitIndexArray[mSpaceIndex] = mUnitIndexArray[mSpaceIndex + 1];
 					mUnitIndexArray[mSpaceIndex + 1] = 0;
 					mSpaceIndex = mSpaceIndex + 1;
-					updateSteps();
+					addSteps();
 				}
 				break;
 
@@ -325,7 +325,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 					mUnitIndexArray[mSpaceIndex] = mUnitIndexArray[mSpaceIndex - 1];
 					mUnitIndexArray[mSpaceIndex - 1] = 0;
 					mSpaceIndex = mSpaceIndex - 1;
-					updateSteps();
+					addSteps();
 				} else {
 					LogUtil.e("Cannot Move from left");
 				}
@@ -371,7 +371,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		super.onDetachedFromWindow();
 	}
 
-	private void updateSteps() {
+	private void addSteps() {
 		mScoreRecord.updateStepCount();
 		updateStepsView(mScoreRecord.getStepCount());
 	}
@@ -604,8 +604,8 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	 */
 	public void resetScoreCounter() {
 		mScoreRecord.resetData(mPuzzleSize);
+		updateStepsView(mScoreRecord.getStepCount());
 		initTimer();
-		updateSteps();
 	}
 
 	/**
@@ -703,15 +703,11 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 			// TODO: handle exception
 			LogUtil.printCodeStack(e);
 		}
-		LogUtil.e("333");
 		return bitmap;
 	}
 
 	public void savePuzzle() {
 		PuzzleProvider provider = PuzzleProvider.getInstance(mContext);
 		provider.savePuzzle(mUnitIndexArray, mScoreRecord);
-		LogUtil.d(mScoreRecord.getCompleteTime() + "; step: "
-				+ mScoreRecord.getStepCount() + "; timer: "
-				+ mScoreRecord.getTimerCount());
 	}
 }
