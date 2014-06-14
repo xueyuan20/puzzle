@@ -25,7 +25,7 @@
         <item >"高级"</item>
     </string-array>
 
-    <string name="title_set_picture">"设置拼板背景图"</string>
+    <string name="title_set_picture">"设置原图"</string>
 
     <string-array name="picture_res_choices">
         <item >"拍照"</item>
@@ -37,13 +37,21 @@
         <item >"相册"</item>
     </string-array>
 
-    <string name="delete">"删除"</string>
-    <string name="share">"分享"</string>
+    <string name="menu_title_back">"返回"</string>
+    <string name="menu_title_share">"分享"</string>
+    <string name="menu_title_delete">"删除"</string>
+    <string name="menu_title_detail">"详情"</string>
+    
+    <string name="menu_title_camera">"拍照"</string>
+    <string name="menu_title_gallery">"相册"</string>
+    <string name="menu_title_default">"默认"</string>
+
     <string name="ok">"确定"</string>
     <string name="cancle">"取消"</string>
 
+    <string name="preview">"预览"</string>
+    <string name="set_image">"设置拼图"</string>
     <string name="appdescription">"应用描述"</string>
-    <string name="preview">"原图"</string>
     <string name="udpate">"检查更新"</string>
     <string name="about">"关于"</string>
     <string name="feedback">"用户反馈"</string>

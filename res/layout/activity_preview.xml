@@ -2,27 +2,77 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/off_white" >
-    <RelativeLayout android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/toolbar_height"
-        android:padding="@dimen/left_border_width">
-	    <ImageView android:id="@+id/iv_preview"
-	        android:layout_centerInParent="true"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:contentDescription="@string/preview"
-	        android:src="@drawable/preview_33"/>
-    </RelativeLayout>
+    android:background="@color/cream_coloured" >
+
+    <ImageView
+        android:id="@+id/iv_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/preview"
+        android:src="@drawable/preview_33" />
+
+    <TextView
+        android:id="@+id/page_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_alignParentTop="true"
+        android:background="@color/half_dark"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/left_border_width"
+        android:text="@string/preview"
+        android:textColor="@color/title_text_color"
+        android:textSize="@dimen/title_text_size" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         android:layout_alignParentBottom="true"
-        android:background="@color/half_white"
-        android:gravity="center">
-        <Button android:id="@+id/btn_read"
-	        android:layout_height="@dimen/button_height"
-	        android:layout_width="@dimen/button_width"
-	        android:text="@string/ok"/>
+        android:background="@color/half_dark"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/left_border_width"
+        android:paddingRight="@dimen/left_border_width" >
+
+        <xy.game.puzzle.view.FloatMenuItem
+            android:id="@+id/floatMenuItem01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            user_img_id="@+id/img_item01"
+            user_src="@drawable/selector_back"
+            user_text="@string/menu_title_back"
+            user_text_id="@+id/text_item01" />
+
+        <xy.game.puzzle.view.FloatMenuItem
+            android:id="@+id/floatMenuItem02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            user_img_id="@+id/img_item02"
+            user_src="@drawable/ic_menu_camera"
+            user_text="@string/menu_title_camera"
+            user_text_id="@+id/text_item02" />
+
+        <xy.game.puzzle.view.FloatMenuItem
+            android:id="@+id/floatMenuItem03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            user_img_id="@+id/img_item03"
+            user_src="@drawable/ic_menu_gallery"
+            user_text="@string/menu_title_gallery"
+            user_text_id="@+id/text_item03" />
+
+        <xy.game.puzzle.view.FloatMenuItem
+            android:id="@+id/floatMenuItem04"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            user_img_id="@+id/img_item04"
+            user_src="@drawable/ic_menu_default"
+            user_text="@string/menu_title_default"
+            user_text_id="@+id/text_item04" />
     </LinearLayout>
+
 </RelativeLayout>

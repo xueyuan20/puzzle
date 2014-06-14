@@ -21,7 +21,7 @@ public class InitPuzzleTask extends AsyncTask<Integer, String, String>{
 	@Override
 	protected String doInBackground(Integer... params) {
 		// TODO Auto-generated method stub
-		mArray = Processor.randomRequences(params[0]*params[0]);
+		mArray = Processor.randomRequences(params[0]);
 		return null;
 	}
 
@@ -39,7 +39,10 @@ public class InitPuzzleTask extends AsyncTask<Integer, String, String>{
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
 		mPuzzleView.setIndexArray(this.mArray);
+		mPuzzleView.resetScoreCounter();
 		mPuzzleView.lockIndexData(false);
+
+		mPuzzleView.savePuzzle();
 	}
 
 }

@@ -12,7 +12,7 @@
     <application
         android:name="xy.game.puzzle.PuzzleApplication"
         android:allowBackup="true"
-        android:icon="@drawable/preview_33"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
             android:name="xy.game.puzzle.activity.MainActivity"

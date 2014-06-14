@@ -18,8 +18,10 @@ public final class R {
     }
     public static final class color {
         public static final int content_text_color=0x7f040001;
+        public static final int cream_coloured=0x7f040006;
+        public static final int half_dark=0x7f040004;
         public static final int half_white=0x7f040003;
-        public static final int off_white=0x7f040004;
+        public static final int off_white=0x7f040005;
         public static final int title_text_color=0x7f040000;
         public static final int white=0x7f040002;
     }
@@ -45,6 +47,11 @@ public final class R {
         public static final int img_size=0x7f05000a;
         public static final int img_text_border=0x7f05000b;
         public static final int left_border_width=0x7f050003;
+        public static final int menu_img_size=0x7f050013;
+        /**  menu item 
+         */
+        public static final int menu_text_size=0x7f050012;
+        public static final int menu_top_border=0x7f050014;
         /**  Puzzle Grid border 
          */
         public static final int puzzle_grid_border=0x7f050008;
@@ -70,40 +77,59 @@ public final class R {
         public static final int ic_home_time=0x7f020007;
         public static final int ic_launcher=0x7f020008;
         public static final int ic_level_selected=0x7f020009;
-        public static final int ic_setting_about=0x7f02000a;
-        public static final int ic_setting_normal=0x7f02000b;
-        public static final int ic_setting_selected=0x7f02000c;
-        public static final int ic_settings_level=0x7f02000d;
-        public static final int ic_update_normal=0x7f02000e;
-        public static final int ic_update_selected=0x7f02000f;
-        public static final int preview_33=0x7f020010;
-        public static final int preview_44=0x7f020011;
-        public static final int preview_55=0x7f020012;
-        public static final int selector_back=0x7f020013;
-        public static final int selector_game_level=0x7f020014;
-        public static final int selector_original_bk=0x7f020015;
-        public static final int selector_restart=0x7f020016;
-        public static final int selector_set_background=0x7f020017;
-        public static final int selector_settings=0x7f020018;
+        public static final int ic_menu_camera=0x7f02000a;
+        public static final int ic_menu_default=0x7f02000b;
+        public static final int ic_menu_delete=0x7f02000c;
+        public static final int ic_menu_gallery=0x7f02000d;
+        public static final int ic_menu_more=0x7f02000e;
+        public static final int ic_menu_share_holo=0x7f02000f;
+        public static final int ic_setting_about=0x7f020010;
+        public static final int ic_setting_normal=0x7f020011;
+        public static final int ic_setting_selected=0x7f020012;
+        public static final int ic_settings_level=0x7f020013;
+        public static final int ic_update_normal=0x7f020014;
+        public static final int ic_update_selected=0x7f020015;
+        public static final int preview_33=0x7f020016;
+        public static final int preview_44=0x7f020017;
+        public static final int preview_55=0x7f020018;
+        public static final int selector_back=0x7f020019;
+        public static final int selector_game_level=0x7f02001a;
+        public static final int selector_original_bk=0x7f02001b;
+        public static final int selector_restart=0x7f02001c;
+        public static final int selector_set_background=0x7f02001d;
+        public static final int selector_settings=0x7f02001e;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0010;
+        public static final int action_settings=0x7f0a001d;
         public static final int app_icon=0x7f0a0000;
-        public static final int btn_read=0x7f0a000e;
+        public static final int btn_read=0x7f0a001b;
+        public static final int floatMenuItem01=0x7f0a000f;
+        public static final int floatMenuItem02=0x7f0a0012;
+        public static final int floatMenuItem03=0x7f0a0015;
+        public static final int floatMenuItem04=0x7f0a0018;
+        public static final int img_item01=0x7f0a0010;
+        public static final int img_item02=0x7f0a0013;
+        public static final int img_item03=0x7f0a0016;
+        public static final int img_item04=0x7f0a0019;
         public static final int iv_preview=0x7f0a000d;
         public static final int main_page=0x7f0a0004;
+        public static final int page_title=0x7f0a000e;
         public static final int puzzle_surfaceview=0x7f0a0005;
+        public static final int text_item01=0x7f0a0011;
+        public static final int text_item02=0x7f0a0014;
+        public static final int text_item03=0x7f0a0017;
+        public static final int text_item04=0x7f0a001a;
         public static final int tv_app_desc=0x7f0a0001;
         public static final int tv_feedback=0x7f0a0003;
         public static final int tv_game_level=0x7f0a0009;
         public static final int tv_game_restart=0x7f0a000b;
-        public static final int tv_game_settings=0x7f0a000c;
-        public static final int tv_original_background=0x7f0a0006;
-        public static final int tv_set_background=0x7f0a000a;
+        public static final int tv_game_settings=0x7f0a0006;
+        public static final int tv_original_background=0x7f0a000a;
+        public static final int tv_set_background=0x7f0a000c;
         public static final int tv_steps=0x7f0a0007;
         public static final int tv_timer=0x7f0a0008;
         public static final int tv_update=0x7f0a0002;
-        public static final int wv_content=0x7f0a000f;
+        public static final int wv_content=0x7f0a001c;
     }
     public static final class layout {
         public static final int activity_about=0x7f030000;
@@ -115,27 +141,33 @@ public final class R {
         public static final int main=0x7f090000;
     }
     public static final class string {
-        public static final int TitleTextStyle=0x7f060014;
-        public static final int about=0x7f060012;
+        public static final int TitleTextStyle=0x7f06001a;
+        public static final int about=0x7f060018;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
-        public static final int appdescription=0x7f06000f;
-        public static final int cancle=0x7f06000e;
-        public static final int delete=0x7f06000b;
-        public static final int feedback=0x7f060013;
+        public static final int appdescription=0x7f060016;
+        public static final int cancle=0x7f060013;
+        public static final int feedback=0x7f060019;
         public static final int hello_world=0x7f060002;
-        public static final int ok=0x7f06000d;
-        public static final int preview=0x7f060010;
+        public static final int menu_title_back=0x7f06000b;
+        public static final int menu_title_camera=0x7f06000f;
+        public static final int menu_title_default=0x7f060011;
+        public static final int menu_title_delete=0x7f06000d;
+        public static final int menu_title_detail=0x7f06000e;
+        public static final int menu_title_gallery=0x7f060010;
+        public static final int menu_title_share=0x7f06000c;
+        public static final int ok=0x7f060012;
+        public static final int preview=0x7f060014;
         public static final int result_content=0x7f060007;
         public static final int result_title=0x7f060006;
-        public static final int share=0x7f06000c;
+        public static final int set_image=0x7f060015;
         public static final int share_content=0x7f060008;
         public static final int title_game_level=0x7f060009;
         public static final int title_score=0x7f060005;
         public static final int title_set_picture=0x7f06000a;
         public static final int title_steps=0x7f060003;
         public static final int title_timer=0x7f060004;
-        public static final int udpate=0x7f060011;
+        public static final int udpate=0x7f060017;
     }
     public static final class style {
         /** 

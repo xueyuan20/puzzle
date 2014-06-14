@@ -10,12 +10,13 @@ import java.util.Random;
 public class Processor {
 
 	private static int[] mIndexArray;
-	private static final int LOOP_COUNT = 160;
+	private static final int LOOP_RADIO = 30;
 	/**
 	 * Generator random sequences.
 	 * @param length, length of sequences.
 	 */
-	public static int[] randomRequences(int length){
+	public static int[] randomRequences(int arraySize){
+		int length = arraySize*arraySize;
 		/*
 		 * initialize order sequences.
 		 */
@@ -31,15 +32,26 @@ public class Processor {
 		 * modify the order.
 		 */
 		Random random = new Random();
-		int loopInd = LOOP_COUNT;
-		int randomInd, tmp;
+		int loopInd = LOOP_RADIO*arraySize;
+		int randomInd, randomIndValue, exchangeInd;
 		
 		try {
 			while (loopInd-- > 0) {
 				randomInd = random.nextInt(length-1);
-				tmp = mIndexArray[randomInd];
-				mIndexArray[randomInd] = mIndexArray[randomInd+1];
-				mIndexArray[randomInd+1] = tmp;
+				randomIndValue = mIndexArray[randomInd];
+
+				if (randomInd%arraySize < (arraySize-1)) {
+					exchangeInd = randomInd + 1;
+				} else {
+					if ((randomInd + 1)/arraySize < arraySize) {
+						exchangeInd = randomInd + arraySize;
+					} else {
+						exchangeInd = randomInd - arraySize;
+					}
+				}
+
+				mIndexArray[randomInd] = mIndexArray[exchangeInd];
+				mIndexArray[exchangeInd] = randomIndValue;
 				Thread.sleep(1);
 			}
 		} catch (InterruptedException e) {

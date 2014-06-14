@@ -1,5 +1,6 @@
 package xy.game.puzzle.logic;
 
+import xy.game.puzzle.util.RecordItem;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -14,7 +15,7 @@ public class PuzzleProvider {
 	private final String SHAREDPREFERENCE_NAME = "puzzle";
 	private final String KEY_GAME_LEVEL = "key_game_level";
 
-	private PuzzleProvider(Context context){
+	private PuzzleProvider(Context context) {
 		mContext = context;
 		mInstance = this;
 		mSharedPrefs = mContext.getSharedPreferences(SHAREDPREFERENCE_NAME,
@@ -25,36 +26,59 @@ public class PuzzleProvider {
 		initParams();
 	}
 
-	public static PuzzleProvider getInstance(Context context){
+	public static PuzzleProvider getInstance(Context context) {
 		if (mInstance == null) {
 			mInstance = new PuzzleProvider(context);
 		}
 		return mInstance;
 	}
 
-	private void initParams(){
+	private void initParams() {
 		int level = mSharedPrefs.getInt(KEY_GAME_LEVEL, 0);
-		if (level==0) {
+		if (level == 0) {
 			mEditor.putInt(KEY_GAME_LEVEL, 0);
 			mEditor.commit();
 		}
 	}
 
-	public void setGameLevel(int level){
+	public void setGameLevel(int level) {
 		mEditor.putInt(KEY_GAME_LEVEL, level);
 		mEditor.commit();
-		mOpenHelper.resetDatabase();
+		mOpenHelper.resetPuzzleTable();
 	}
 
-	public int getGameLevel(){
+	public int getGameLevel() {
 		return mSharedPrefs.getInt(KEY_GAME_LEVEL, 0);
 	}
 
-	public int[] getArray(){
+	public int[] getArray() {
 		return mOpenHelper.queryPuzzleArray();
 	}
 
-	public void saveArray(int[] array){
+	public void savePuzzle(int[] array, RecordItem scoreRecord){
+		saveArray(array);
+		saveScore(scoreRecord);
+	}
+
+	private void saveArray(int[] array) {
 		mOpenHelper.savePuzzle(array);
 	}
+
+	private void saveScore(RecordItem scoreRecord) {
+		// TODO Auto-generated method stub
+		mOpenHelper.delUncompleteRecord();
+		mOpenHelper.insertScore(scoreRecord);
+	}
+
+	public RecordItem queryRecord() {
+		return mOpenHelper
+				.queryRecord(mSharedPrefs.getInt(KEY_GAME_LEVEL, 0) + 3);
+	}
+
+	public void deleteRecord(RecordItem record){
+		if (queryRecord() != null) {
+			mOpenHelper.delete(record);
+		}
+	}
+
 }

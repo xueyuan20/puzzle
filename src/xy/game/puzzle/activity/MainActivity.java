@@ -2,8 +2,9 @@ package xy.game.puzzle.activity;
 
 import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
+import xy.game.puzzle.logic.ScreenShotAsyncTask;
 import xy.game.puzzle.util.MessageUtils;
-import xy.game.puzzle.util.ScreenShot;
+import xy.game.puzzle.util.ScreenUtil;
 import xy.game.puzzle.view.PuzzleSurfaceView;
 import xy.game.puzzle.view.PuzzleSurfaceView.DIFFICULTY_LEVEL;
 import android.app.Activity;
@@ -12,7 +13,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +33,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private Resources mRes;
 	private Context mContext;
 	private boolean mEnableTimer;
-	private String mResultContent = "";	
+	private String mResultContent = "";
 
 	private Handler mHandler = new Handler() {
 
@@ -48,26 +48,32 @@ public class MainActivity extends Activity implements OnClickListener {
 				break;
 
 			case MessageUtils.MSG_RESULT:
-				mResultContent = msg.getData().getString(MessageUtils.KEY_RESULT_CONTENT);
-				new AlertDialog.Builder(MainActivity.this).setTitle(
-						mRes.getString(R.string.result_title))
+				mResultContent = msg.getData().getString(
+						MessageUtils.KEY_RESULT_CONTENT);
+				new AlertDialog.Builder(MainActivity.this)
+						.setTitle(mRes.getString(R.string.result_title))
 						.setMessage(mResultContent)
-						.setNegativeButton(mRes.getString(R.string.share),
+						.setNegativeButton(mRes.getString(R.string.menu_title_share),
 								new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface arg0, int arg1) {
-								// TODO Auto-generated method stub
-								ScreenShot.shareMsg(mContext,
-										getTitle().toString(),
-										mRes.getString(R.string.share),
-										String.format(mRes.getString(R.string.share_content),
-												mRes.getString(R.string.app_name),
-												mResultContent), null);
-							}
-						}).setPositiveButton(mRes.getString(R.string.ok), null)
-						.setIcon(getResources().getDrawable(
-								R.drawable.ic_launcher)).show();
+
+									@Override
+									public void onClick(DialogInterface arg0,
+											int arg1) {
+										// TODO Auto-generated method stub
+										ScreenUtil.shareMsg(
+												mContext,
+												getTitle().toString(),
+												mRes.getString(R.string.menu_title_share),
+												String.format(
+														mRes.getString(R.string.share_content),
+														mRes.getString(R.string.app_name),
+														mResultContent), null);
+									}
+								})
+						.setPositiveButton(mRes.getString(R.string.ok), null)
+						.setIcon(
+								getResources().getDrawable(
+										R.drawable.ic_launcher)).show();
 				break;
 
 			case MessageUtils.MSG_CHANGE_LEVEL:
@@ -94,6 +100,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			case MessageUtils.MSG_START_TIMER:
 				sendEmptyMessageDelayed(MessageUtils.MSG_START_TIMER, 1000);
+			case MessageUtils.MSG_INIT_TIMER:
 				if (mEnableTimer) {
 					int timer = mPuzzleView.getTimerCount();
 					mTvTimer.setText(String.format("%02d:%02d:%02d", timer
@@ -189,11 +196,9 @@ public class MainActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.tv_set_background:
-			String path = ScreenShot.getAndSaveCurrentImage(mPuzzleView.getScreenWidth(),
-					mPuzzleView.getScreenHeight(), this, mPuzzleView.getScreenshot());
-			Intent intent = new Intent(Intent.ACTION_VIEW);    
-            intent.setDataAndType(Uri.parse("file://"+path), "image/*");
-            startActivity(Intent.createChooser(intent, path));
+			ScreenShotAsyncTask task = new ScreenShotAsyncTask(
+					MainActivity.this, mPuzzleView);
+			task.execute("");
 			break;
 
 		case R.id.tv_game_restart:

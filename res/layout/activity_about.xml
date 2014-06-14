@@ -10,7 +10,7 @@
         android:padding="25dip">
         <ImageView
             android:id="@+id/app_icon"
-            android:src="@drawable/preview_33"
+            android:src="@drawable/ic_launcher"
             android:layout_width="@dimen/img_size"
             android:layout_height="@dimen/img_size"
             android:contentDescription="@string/appdescription"

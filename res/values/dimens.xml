@@ -31,4 +31,9 @@
     <dimen name="toolbar_height">72dip</dimen>
     <dimen name="button_height">52dip</dimen>
     <dimen name="button_width">240dip</dimen>
+
+    <!-- menu item -->
+    <dimen name="menu_text_size">12sp</dimen>
+    <dimen name="menu_img_size">20dip</dimen>
+    <dimen name="menu_top_border">10dip</dimen>
 </resources>
