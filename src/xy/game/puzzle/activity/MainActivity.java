@@ -53,7 +53,8 @@ public class MainActivity extends Activity implements OnClickListener {
 				new AlertDialog.Builder(MainActivity.this)
 						.setTitle(mRes.getString(R.string.result_title))
 						.setMessage(mResultContent)
-						.setNegativeButton(mRes.getString(R.string.menu_title_share),
+						.setNegativeButton(
+								mRes.getString(R.string.menu_title_share),
 								new DialogInterface.OnClickListener() {
 
 									@Override
@@ -261,4 +262,19 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void stopTimer() {
 		mEnableTimer = false;
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		switch (requestCode) {
+		case MessageUtils.CODE_PREVIEW_IMG:
+
+			break;
+
+		default:
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
 }

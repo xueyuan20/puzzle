@@ -136,7 +136,7 @@ public class ScreenUtil {
 	 * 
 	 * @return
 	 */
-	private static String getSDCardPath() {
+	public static String getSDCardPath() {
 		File sdcardDir = null;
 		// ÅÐ¶ÏSDCardÊÇ·ñ´æÔÚ
 		boolean sdcardExist = Environment.getExternalStorageState().equals(

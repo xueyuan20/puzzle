@@ -7,8 +7,14 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- network -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Camera -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:name="xy.game.puzzle.PuzzleApplication"
         android:allowBackup="true"
@@ -31,7 +37,8 @@
         <!-- Subpage: Preview -->
         <activity android:name="xy.game.puzzle.activity.PreviewActivity"
             android:theme="@style/FullscreenPage"
-            android:label="@string/preview" />
+            android:label="@string/preview"
+            android:multiprocess="true" />
         <!-- Subpage: User Agreement -->
         <activity android:name="xy.game.puzzle.activity.UserAgreementActivity"
             android:theme="@style/FullscreenPage"

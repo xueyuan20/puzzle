@@ -30,4 +30,12 @@ public class MessageUtils {
 	public static final String KEY_STEPS = "steps_count";
 	public static final String KEY_GAME_LEVEL = "game_level";
 	public static final String KEY_RESULT_CONTENT = "result_content";
+	public static final String KEY_FILE_PATH = "file_path";
+
+	/**
+	 * Activity Request Code
+	 */
+	public static final int CODE_PREVIEW_IMG = 101;
+	public static final int CODE_FROM_CAMERA = 102;
+	public static final int CODE_FROM_GALLERY = 103;
 }
