@@ -33,4 +33,20 @@ public class UnitRect{
 	public int getCenterY(){
 		return (mRect.top+mRect.bottom)/2;
 	}
+
+	public int left(){
+		return mRect.left;
+	}
+
+	public int right(){
+		return mRect.right;
+	}
+
+	public int top(){
+		return mRect.top;
+	}
+
+	public int bottom(){
+		return mRect.bottom;
+	}
 }

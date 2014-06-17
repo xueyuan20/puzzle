@@ -8,7 +8,9 @@ import xy.game.puzzle.logic.RefreshByLocalFileTask;
 import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.MessageUtils;
 import xy.game.puzzle.util.ScreenUtil;
+import xy.game.puzzle.util.StorageUtil;
 import xy.game.puzzle.view.FloatMenuItem;
+import xy.game.puzzle.view.PreviewSurfaceView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -22,15 +24,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PreviewActivity extends Activity implements OnClickListener {
 	private boolean mPreviewModeFlag = false;
 	private FloatMenuItem[] mMenuArray;
-	private ImageView mIvPreview;
+	// private ImageView mIvPreview;
+	private PreviewSurfaceView mSvPreview;
 	private TextView mTvPageTitle;
 	private String mFileName;
 	private String mFilePath;
@@ -45,17 +48,18 @@ public class PreviewActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_preview);
 		mRes = getResources();
 
-		mIvPreview = (ImageView) findViewById(R.id.iv_preview);
+		// mIvPreview = (ImageView) findViewById(R.id.iv_preview);
+		mSvPreview = (PreviewSurfaceView) findViewById(R.id.preview);
 		mTvPageTitle = (TextView) findViewById(R.id.page_title);
 
 		Intent intent = getIntent();
-		LogUtil.e("Get Intent + " + intent);
 		if ((intent != null) && (intent.getExtras() != null)) {
-			mPreviewModeFlag = true;
 			mFilePath = intent.getExtras()
 					.getString(MessageUtils.KEY_FILE_PATH);
-			RefreshByLocalFileTask task = new RefreshByLocalFileTask(mIvPreview);
-			task.execute(mFilePath);
+			mPreviewModeFlag = intent.getExtras().getBoolean(
+					MessageUtils.KEY_IS_PREVIEW);
+			LogUtil.d("[PreviewActivity] file path = " + mFilePath
+					+ "; preview=" + mPreviewModeFlag);
 		}
 
 		mMenuArray = new FloatMenuItem[4];
@@ -68,32 +72,31 @@ public class PreviewActivity extends Activity implements OnClickListener {
 		mMenuArray[3] = (FloatMenuItem) findViewById(R.id.floatMenuItem04);
 		mMenuArray[3].setOnClickListener(this);
 
+		mSvPreview.setPreviewMode(mPreviewModeFlag);
 		if (mPreviewModeFlag) {
 			mTvPageTitle.setText(mRes.getString(R.string.preview));
 			mMenuArray[1].setTextAndSrc(R.string.menu_title_share);
 			mMenuArray[2].setTextAndSrc(R.string.menu_title_delete);
 			mMenuArray[3].setTextAndSrc(R.string.menu_title_detail);
+			// RefreshByLocalFileTask task = new
+			// RefreshByLocalFileTask(mIvPreview);
+			RefreshByLocalFileTask task = new RefreshByLocalFileTask(
+					mPreviewModeFlag, mSvPreview);
+			task.execute(mFilePath);
 		} else {
 			mTvPageTitle.setText(mRes.getString(R.string.set_image));
-			setDefaultPreview();
+			PuzzleProvider provider = PuzzleProvider.getInstance(this);
+			if (provider.checkUseDefaultBk()) {
+				setDefaultPreview();
+			} else {
+				mSvPreview.setBackgroundByPath(provider.getCustomBkPath());
+			}
 		}
 	}
 
 	private void setDefaultPreview() {
-		switch (PuzzleProvider.getInstance(this).getGameLevel()) {
-		case 0:
-			mIvPreview.setImageResource(R.drawable.preview_33);
-			break;
-
-		case 1:
-			mIvPreview.setImageResource(R.drawable.preview_44);
-			break;
-		case 2:
-			mIvPreview.setImageResource(R.drawable.preview_55);
-			break;
-		default:
-			break;
-		}
+		mSvPreview.setImageAsBackground(true, null);
+		PuzzleProvider.getInstance(this).setUseDefaultBk(true);
 	}
 
 	@Override
@@ -159,8 +162,9 @@ public class PreviewActivity extends Activity implements OnClickListener {
 			File delFile = new File(mFilePath);
 			if (delFile.exists()) {
 				if (delFile.delete()) {
-					mIvPreview
-							.setImageResource(android.R.drawable.stat_sys_warning);
+					// mIvPreview
+					// .setImageResource(android.R.drawable.stat_sys_warning);
+					mSvPreview.showBrokenIcon();
 				}
 			}
 			break;
@@ -192,21 +196,38 @@ public class PreviewActivity extends Activity implements OnClickListener {
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case MessageUtils.CODE_FROM_CAMERA:
+				// RefreshByLocalFileTask task = new RefreshByLocalFileTask(
+				// mIvPreview);
 				RefreshByLocalFileTask task = new RefreshByLocalFileTask(
-						mIvPreview);
+						mPreviewModeFlag, mSvPreview);
 				task.execute(mFileName);
 				break;
 
 			case MessageUtils.CODE_FROM_GALLERY:
-				Uri uri = data.getData();
-				ContentResolver cr = this.getContentResolver();
-				try {
-					Bitmap bitmap = BitmapFactory.decodeStream(cr
-							.openInputStream(uri));
-					// start to deal with bitmap.
-					mIvPreview.setImageBitmap(bitmap);
-				} catch (Exception e) {
-					// TODO: handle exception
+				if (!mPreviewModeFlag) {
+					Uri uri = data.getData();
+					ContentResolver cr = this.getContentResolver();
+					try {
+						Bitmap bitmap = BitmapFactory.decodeStream(cr
+								.openInputStream(uri));
+						// start to deal with bitmap.
+						// mIvPreview.setImageBitmap(bitmap);
+						mSvPreview.setImageAsBackground(false, bitmap);
+
+						PuzzleProvider provider = PuzzleProvider
+								.getInstance(PreviewActivity.this);
+
+						String path = StorageUtil.saveBackground(bitmap);
+						LogUtil.e("from gallery [file path] " + path);
+
+						if ((path != null) && (!TextUtils.isEmpty(path))) {
+							provider.setUseDefaultBk(false);
+							provider.setCustomBkPath(path);
+						}
+					} catch (Exception e) {
+						// TODO: handle exception
+						LogUtil.printCodeStack(e);
+					}
 				}
 				break;
 
@@ -214,5 +235,9 @@ public class PreviewActivity extends Activity implements OnClickListener {
 				break;
 			}
 		}
+	}
+
+	public boolean checkPreviewMode() {
+		return mPreviewModeFlag;
 	}
 }

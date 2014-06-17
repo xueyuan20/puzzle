@@ -4,6 +4,15 @@
     android:layout_height="match_parent"
     android:background="@color/cream_coloured" >
 
+    <xy.game.puzzle.view.PreviewSurfaceView
+        android:id="@+id/preview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        backgroundResId="@drawable/preview_33"
+        previewMode="0"
+        puzzleLevel="0"
+        userDefaultBmp="1" />
+    <!--
     <ImageView
         android:id="@+id/iv_preview"
         android:layout_width="wrap_content"
@@ -11,6 +20,7 @@
         android:layout_centerInParent="true"
         android:contentDescription="@string/preview"
         android:src="@drawable/preview_33" />
+    -->
 
     <TextView
         android:id="@+id/page_title"

@@ -67,7 +67,7 @@
             android:background="@drawable/selector_restart" />
 
         <TextView
-            android:id="@+id/tv_set_background"
+            android:id="@+id/tv_screenshot"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_margin="@dimen/icon_div"

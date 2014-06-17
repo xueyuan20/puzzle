@@ -31,6 +31,7 @@ public class MessageUtils {
 	public static final String KEY_GAME_LEVEL = "game_level";
 	public static final String KEY_RESULT_CONTENT = "result_content";
 	public static final String KEY_FILE_PATH = "file_path";
+	public static final String KEY_IS_PREVIEW = "is_preview_mode";
 
 	/**
 	 * Activity Request Code

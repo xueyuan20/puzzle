@@ -1,6 +1,7 @@
 package xy.game.puzzle.logic;
 
 import xy.game.puzzle.activity.PreviewActivity;
+import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.MessageUtils;
 import xy.game.puzzle.util.ScreenUtil;
 import xy.game.puzzle.view.PuzzleSurfaceView;
@@ -30,6 +31,7 @@ public class ScreenShotAsyncTask extends AsyncTask<String, String, String> {
 	protected String doInBackground(String... params) {
 		// TODO Auto-generated method stub
 		Bitmap bmp = mPuzzleView.getScreenshot();
+		LogUtil.d("save screenShot");
 		String path = ScreenUtil.saveScreenshot(mPuzzleView.getScreenWidth(),
 				mPuzzleView.getScreenHeight(), mParent, bmp);
 		if ((bmp != null) && (!bmp.isRecycled())) {
@@ -49,6 +51,7 @@ public class ScreenShotAsyncTask extends AsyncTask<String, String, String> {
 		Intent intent = new Intent(mParent, PreviewActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString(MessageUtils.KEY_FILE_PATH, result);
+		bundle.putBoolean(MessageUtils.KEY_IS_PREVIEW, true);
 		intent.putExtras(bundle);
 		mParent.startActivityForResult(intent, MessageUtils.CODE_PREVIEW_IMG);
 	}

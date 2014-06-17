@@ -19,7 +19,8 @@
         android:name="xy.game.puzzle.PuzzleApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:hardwareAccelerated="false" >
         <activity
             android:name="xy.game.puzzle.activity.MainActivity"
             android:label="@string/app_name"

@@ -9,6 +9,7 @@ import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.MessageUtils;
 import xy.game.puzzle.util.Position;
 import xy.game.puzzle.util.RecordItem;
+import xy.game.puzzle.util.ScreenUtil;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -195,23 +197,37 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 
 				// ªÊ÷∆number
 				if (mUnitIndexArray != null && !mDataLockFlag) {
+					mPaint.setColor(Color.WHITE);
 					mPaint.setTextAlign(Align.CENTER);
 					mPaint.setTextSize(mRes.getDimension(R.dimen.font_zise));
 					mPaint.setStyle(Style.FILL);
-					mPaint.setColor(Color.WHITE);
-					for (int i = 0; i < mUnitIndexArray.length; i++) {
-						if (mUnitIndexArray[i] > 0) {
-							mCanvas.drawText(
-									String.valueOf(mUnitIndexArray[i]),
-									mUnitRectArray[i].getRect().centerX(),
-									mUnitRectArray[i].getRect().centerY()
-											+ mPaint.getTextSize() / 3, mPaint);
+					if (PuzzleProvider.getInstance(mContext)
+							.checkUseDefaultBk()) {
+						for (int i = 0; i < mUnitIndexArray.length; i++) {
+							if (mUnitIndexArray[i] > 0) {
+								mCanvas.drawText(
+										String.valueOf(mUnitIndexArray[i]),
+										mUnitRectArray[i].getRect().centerX(),
+										mUnitRectArray[i].getRect().centerY()
+												+ mPaint.getTextSize() / 3,
+										mPaint);
+							}
 						}
-					}
-
-					// ªÊ÷∆ÕºøÈ
-					if (mBmpPaint != null && mBmpPaint.length > 0) {
-						// LogUtil.e("Unsurportted!");
+					} else {
+						// ªÊ÷∆ÕºøÈ
+						if (mBmpPaint != null && mBmpPaint.length > 0) {
+							// LogUtil.e("Unsurportted!");
+							mPaint.setColor(Color.WHITE);
+							mPaint.setAlpha(0xFF);
+							for (int i = 0; i < mUnitIndexArray.length; i++) {
+								if (mUnitIndexArray[i] > 0) {
+									mCanvas.drawBitmap(
+											mBmpPaint[mUnitIndexArray[i]],
+											mUnitRectArray[i].left(),
+											mUnitRectArray[i].top(), mPaint);
+								}
+							}
+						}
 					}
 				}
 
@@ -239,6 +255,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		mScreenWidth = getWidth();
 		mScreenHeight = getHeight();
 
+		LogUtil.e("surface create");
 		// ≥ı ºªØ∆¥∞Â
 		initPuzzle(false);
 		mUpdateEnable = true;
@@ -260,6 +277,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 			}
 			mBmpPaint = null;
 		}
+		LogUtil.e("surface destroy");
 	}
 
 	/**
@@ -477,11 +495,6 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		}
 
 		/**
-		 * ≥ı ºªØÕº∆¨ª≠± 
-		 */
-		initBmpPaint();
-
-		/**
 		 * ≥ı ºªØ∆¥Õº–Ú¡–
 		 */
 		if (!isNew) {
@@ -495,6 +508,11 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		if (isNew) {
 			new InitPuzzleTask(this).execute(mPuzzleSize);
 		}
+
+		/**
+		 * ≥ı ºªØÕº∆¨ª≠± 
+		 */
+		initBmpPaint();
 
 		/**
 		 * initialize steps count.
@@ -541,7 +559,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		 */
 		if (mBmpPaint != null && mBmpPaint.length > 0) {
 			for (int i = 0; i < mBmpPaint.length; i++) {
-				if (mBmpPaint[i] != null) {
+				if ((mBmpPaint[i] != null) && (!mBmpPaint[i].isRecycled())) {
 					mBmpPaint[i].recycle();
 					mBmpPaint[i] = null;
 				}
@@ -551,7 +569,27 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		/**
 		 * ≥ı ºªØª≠± 
 		 */
-		mBmpPaint = new Bitmap[mPuzzleSize * mPuzzleSize - 1];
+		PuzzleProvider provider = PuzzleProvider.getInstance(mContext);
+		String path = provider.getCustomBkPath();
+		LogUtil.e("default [" + provider.checkUseDefaultBk() + "] path: "
+				+ provider.getCustomBkPath());
+		if (!provider.checkUseDefaultBk() && (path != null)
+				&& (!TextUtils.isEmpty(path))) {
+			Bitmap background = ScreenUtil
+					.getBitmapByWidth(path, getWidth(), 0);
+			if ((background != null) && (!background.isRecycled())) {
+				mBmpPaint = new Bitmap[mUnitIndexArray.length];
+				for (int i = 1; i < mUnitIndexArray.length; i++) {
+					mBmpPaint[i] = Bitmap.createBitmap(background,
+							mUnitRectArray[i - 1].left() - mPuzzleRect.left,
+							mUnitRectArray[i - 1].top() - mPuzzleRect.top,
+							mGridSize, mGridSize);
+
+//					StorageUtil.saveToTmpPath((Activity) mContext,
+//							mBmpPaint[i], "background_" + String.valueOf(i));
+				}
+			}
+		}
 
 	}
 
@@ -654,13 +692,12 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	public Bitmap getScreenshot() {
 
 		// TODO Auto-generated method stub
-		LogUtil.e("111");
 		Bitmap bitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight,
 				Config.ARGB_8888);
 		Canvas clipCanvas = new Canvas(bitmap);
 		try {
 
-			if (clipCanvas != null) {LogUtil.e("222");
+			if (clipCanvas != null) {
 				// ªÊ÷∆±≥æ∞
 				clipCanvas.drawColor(mRes.getColor(R.color.cream_coloured));// √◊∞◊…´±≥æ∞
 				// ªÊ÷∆∆¥∞Â
@@ -695,6 +732,17 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 					// ªÊ÷∆ÕºøÈ
 					if (mBmpPaint != null && mBmpPaint.length > 0) {
 						// LogUtil.e("Unsurportted!");
+						mPaint.setColor(Color.WHITE);
+						mPaint.setAlpha(0xFF);
+						for (int i = 0; i < mUnitIndexArray.length; i++) {
+							if (mUnitIndexArray[i] > 0) {
+								clipCanvas.drawBitmap(
+										mBmpPaint[mUnitIndexArray[i]],
+										mUnitRectArray[i].left(),
+										mUnitRectArray[i].top(), mPaint);
+
+							}
+						}
 					}
 				}
 

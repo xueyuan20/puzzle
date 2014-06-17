@@ -1,19 +1,18 @@
 package xy.game.puzzle.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
 
-import xy.game.puzzle.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Environment;
+import android.text.TextUtils;
 import android.view.View;
 
 public class ScreenUtil {
@@ -29,7 +28,6 @@ public class ScreenUtil {
 	 */
 	public static String saveScreenshot(int screenW, int screenH,
 			Activity activity, Bitmap frontBmp) {
-		LogUtil.e("1111111");
 		// 构建Bitmap
 		// 获取屏幕
 		View decorview = activity.getWindow().getDecorView();
@@ -37,20 +35,15 @@ public class ScreenUtil {
 			return null;
 		}
 
-		LogUtil.e("222222222");
 		decorview.setDrawingCacheEnabled(true);
 		decorview.buildDrawingCache();
 		Bitmap bmp = decorview.getDrawingCache();
-		LogUtil.e("****333333333 _ ");
 
 		Bitmap newBitmap = combineBitmap(bmp, frontBmp);
 		decorview.destroyDrawingCache();
-		LogUtil.e("333333333 _ "
-				+ (newBitmap == null ? "null" : newBitmap.getByteCount()));
-		String path = saveBmpToSDcard(activity, newBitmap, "/ScreenShot_"
+		String path = StorageUtil.saveTmpToScreenShot(activity, newBitmap, "/ScreenShot_"
 				+ String.valueOf(System.currentTimeMillis() / 1000));
 
-		LogUtil.e("4444444444 _ " + path);
 		// free
 		if (!bmp.isRecycled()) {
 			bmp.recycle();
@@ -64,89 +57,6 @@ public class ScreenUtil {
 		return path;
 	}
 
-	private static String saveBmpToSDcard(Activity activity, Bitmap bmp,
-			String fileName) {
-		if (bmp == null || bmp.isRecycled()) {
-			return null;
-		}
-		// 图片存储路径
-		String savePath = getSDCardPath() + "/Puzzle/ScreenShots";
-
-		// 保存Bitmap
-		try {
-			File path = new File(savePath);
-			if (!path.exists()) {
-				path.mkdirs();
-			}
-			// 文件
-			String filepath = savePath + fileName + ".png";
-			File file = new File(filepath);
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			FileOutputStream fos = null;
-			fos = new FileOutputStream(file);
-			if (null != fos) {
-				bmp.compress(Bitmap.CompressFormat.PNG, 90, fos);
-				fos.flush();
-				fos.close();
-				// Toast.makeText(activity,
-				// "截屏文件已保存至SDCard/Puzzle/ScreenImages/目录下",
-				// Toast.LENGTH_LONG).show();
-			}
-			return filepath;
-		} catch (Exception e) {
-			LogUtil.printCodeStack(e);
-		}
-		return null;
-	}
-
-	public static String getIconPath(Activity activity) {
-		String iconFilePath = getSDCardPath() + "/Puzzle";
-		File path = new File(iconFilePath);
-		String iconFileName = iconFilePath + "/icon.png";
-		File file = new File(iconFileName);
-		if (!path.exists()) {
-			path.mkdirs();
-		}
-
-		if (file.exists()) {
-			return iconFileName;
-		}
-
-		Bitmap bmp = BitmapFactory.decodeResource(activity.getResources(),
-				R.drawable.ic_launcher);
-		saveBmpToSDcard(activity, bmp, iconFileName);
-
-		if (!bmp.isRecycled()) {
-			bmp.recycle();
-			bmp = null;
-		}
-
-		if (file.exists()) {
-			return iconFileName;
-		} else {
-			return null;
-		}
-
-	}
-
-	/**
-	 * 获取SDCard的目录路径功能
-	 * 
-	 * @return
-	 */
-	public static String getSDCardPath() {
-		File sdcardDir = null;
-		// 判断SDCard是否存在
-		boolean sdcardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED);
-		if (sdcardExist) {
-			sdcardDir = Environment.getExternalStorageDirectory();
-		}
-		return sdcardDir.toString();
-	}
-
 	/**
 	 * 合并图片
 	 * 
@@ -156,10 +66,8 @@ public class ScreenUtil {
 	 */
 	private static Bitmap combineBitmap(Bitmap background, Bitmap foreground) {
 		if (background == null || background.isRecycled()) {
-			LogUtil.e("1 _ ");
 			return null;
 		}
-		LogUtil.e("2 _ ");
 		int bgWidth = background.getWidth();
 		int bgHeight = background.getHeight();
 		int fgWidth = foreground.getWidth();
@@ -243,5 +151,111 @@ public class ScreenUtil {
 	public static int px2dip(Context context, float pxValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		return (int) (pxValue / scale + 0.5f);
+	}
+
+	/**
+	 * 根据宽度从本地图片路径获取该图片的缩略图
+	 * 
+	 * @param localImagePath
+	 *            本地图片的路径
+	 * @param width
+	 *            缩略图的宽
+	 * @param addedScaling
+	 *            额外可以加的缩放比例
+	 * @return bitmap 指定宽高的缩略图
+	 */
+	public static Bitmap getBitmapByWidth(String localImagePath, int width,
+			int addedScaling) {
+		if (TextUtils.isEmpty(localImagePath)) {
+			return null;
+		}
+
+		Bitmap temBitmap = null;
+
+		try {
+			BitmapFactory.Options outOptions = new BitmapFactory.Options();
+
+			// 设置该属性为true，不加载图片到内存，只返回图片的宽高到options中。
+			outOptions.inJustDecodeBounds = true;
+
+			// 加载获取图片的宽高
+			BitmapFactory.decodeFile(localImagePath, outOptions);
+
+			int height = outOptions.outHeight;
+
+			if (outOptions.outWidth > width) {
+				// 根据宽设置缩放比例
+				outOptions.inSampleSize = (width == 0) ? 1
+						: (outOptions.outWidth / width + addedScaling);
+				outOptions.outWidth = width;
+
+				// 计算缩放后的高度
+				height = outOptions.outHeight / outOptions.inSampleSize;
+				outOptions.outHeight = height;
+			}
+
+			// 重新设置该属性为false，加载图片返回
+			outOptions.inJustDecodeBounds = false;
+			outOptions.inPurgeable = true;
+			outOptions.inInputShareable = true;
+			temBitmap = BitmapFactory.decodeFile(localImagePath, outOptions);
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+
+		return temBitmap;
+	}
+
+	/**
+	 * 根据宽度从本地图片路径获取该图片的缩略图
+	 * 
+	 * @param localImagePath
+	 *            本地图片的路径
+	 * @param width
+	 *            缩略图的宽
+	 * @param addedScaling
+	 *            额外可以加的缩放比例
+	 * @return bitmap 指定宽高的缩略图
+	 */
+	public static Bitmap getBitmap(Resources res, int resId, int width,
+			int addedScaling) {
+
+		Bitmap temBitmap = null;
+
+		try {
+			BitmapFactory.Options outOptions = new BitmapFactory.Options();
+
+			// 设置该属性为true，不加载图片到内存，只返回图片的宽高到options中。
+			outOptions.inJustDecodeBounds = true;
+
+			// 加载获取图片的宽高
+			BitmapFactory.decodeResource(res, resId, outOptions);
+
+			int height = outOptions.outHeight;
+
+			if (outOptions.outWidth > width) {
+				// 根据宽设置缩放比例
+				outOptions.inSampleSize = width == 0 ? 1 : outOptions.outWidth
+						/ width + addedScaling;
+				outOptions.outWidth = width;
+
+				// 计算缩放后的高度
+				height = outOptions.outHeight / outOptions.inSampleSize;
+				outOptions.outHeight = height;
+			}
+
+			// // 重新设置该属性为false，加载图片返回
+			 outOptions.inJustDecodeBounds = false;
+			 outOptions.inPurgeable = true;
+			 outOptions.inInputShareable = true;
+			 temBitmap = BitmapFactory.decodeResource(res, resId, outOptions);
+
+			LogUtil.e("bitmap width = " + temBitmap.getWidth() + "; height = "
+					+ temBitmap.getHeight());
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+
+		return temBitmap;
 	}
 }

@@ -145,7 +145,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		mTvSetLevel = (TextView) findViewById(R.id.tv_game_level);
 		mTvSetLevel.setOnClickListener(this);
 
-		mTvSetBg = (TextView) findViewById(R.id.tv_set_background);
+		mTvSetBg = (TextView) findViewById(R.id.tv_screenshot);
 		mTvSetBg.setOnClickListener(this);
 
 		mTvRestart = (TextView) findViewById(R.id.tv_game_restart);
@@ -196,7 +196,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			break;
 
-		case R.id.tv_set_background:
+		case R.id.tv_screenshot:
 			ScreenShotAsyncTask task = new ScreenShotAsyncTask(
 					MainActivity.this, mPuzzleView);
 			task.execute("");
