@@ -265,6 +265,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
+		savePuzzle();
 		mUpdateEnable = false;
 		if (mBmpPaint != null) {
 			int ind = mBmpPaint.length;
@@ -379,13 +380,14 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	@Override
 	protected void onAttachedToWindow() {
 		// TODO Auto-generated method stub
+		LogUtil.d("[PuzzleSurfaceView] + onAttachedToWindow...");
 		super.onAttachedToWindow();
 	}
 
 	@Override
 	protected void onDetachedFromWindow() {
 		// TODO Auto-generated method stub
-		savePuzzle();
+		LogUtil.d("[PuzzleSurfaceView] + onDetachedFromWindow...");
 		super.onDetachedFromWindow();
 	}
 

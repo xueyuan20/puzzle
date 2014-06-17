@@ -193,6 +193,8 @@ public class PreviewActivity extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
+		LogUtil.e("[PreviewActivity] requestCode:" + requestCode + "resultCode"
+				+ resultCode);
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case MessageUtils.CODE_FROM_CAMERA:
@@ -217,7 +219,9 @@ public class PreviewActivity extends Activity implements OnClickListener {
 						PuzzleProvider provider = PuzzleProvider
 								.getInstance(PreviewActivity.this);
 
-						String path = StorageUtil.saveBackground(bitmap);
+						// String path = StorageUtil.saveBackground(bitmap);
+						String path = StorageUtil.saveBackground(mSvPreview
+								.getBackgroundBmp());
 						LogUtil.e("from gallery [file path] " + path);
 
 						if ((path != null) && (!TextUtils.isEmpty(path))) {

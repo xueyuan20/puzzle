@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.graphics.Region.Op;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -28,9 +29,6 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 	private Canvas mCanvas;
 	private Paint mPaint;
 	private SurfaceHolder mHolder;
-
-	private Canvas mClipCanvas;
-	private Bitmap mClipBitmap;
 	/**
 	 * ∆¥∞Â«¯”Ú
 	 */
@@ -209,10 +207,6 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		mPuzzleRect = new Rect(borderLeft, borderTop, borderLeft + puzzleWidth,
 				borderTop + puzzleWidth);
 
-		mClipBitmap = Bitmap.createBitmap(mPuzzleRect.width(),
-				mPuzzleRect.height(), Config.ARGB_8888);
-		mClipCanvas = new Canvas(mClipBitmap);
-
 		// ≥ı ºªØ
 		mUpdateEnable = true;
 		initParams();
@@ -251,10 +245,6 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		if (mBackgroundBmp != null && !mBackgroundBmp.isRecycled()) {
 			mBackgroundBmp.recycle();
 			mBackgroundBmp = null;
-		}
-		if (mClipBitmap != null && !mClipBitmap.isRecycled()) {
-			mClipBitmap.recycle();
-			mClipBitmap = null;
 		}
 	}
 
@@ -321,12 +311,53 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 	}
 
 	public Bitmap getBackgroundBmp() {
-		Bitmap bmp = null;
-		if (mBackgroundBmp != null && !mBackgroundBmp.isRecycled()) {
-			bmp = Bitmap.createBitmap(mBackgroundBmp, mPuzzleRect.left,
-					mPuzzleRect.top, mPuzzleRect.right, mPuzzleRect.bottom);
+		Bitmap newBmp = null;
+		// if (mBackgroundBmp != null && !mBackgroundBmp.isRecycled()) {
+		// bmp = Bitmap.createBitmap(mBackgroundBmp, mPuzzleRect.left,
+		// mPuzzleRect.top, mPuzzleRect.right, mPuzzleRect.bottom);
+		// }
+		Bitmap bmp = Bitmap.createBitmap(getWidth(), getHeight(),
+				Config.ARGB_8888);
+		Canvas canvas = new Canvas(bmp);
+		// TODO Auto-generated method stub
+		try {
+
+			if (canvas != null) {
+				canvas.drawColor(Color.DKGRAY);
+				if (!mIsPreviewMode) {
+					if ((mBackgroundBmp == null)
+							|| (mBackgroundBmp.isRecycled())) {
+						useDefaultImageBitmap();
+					}
+					mPaint.setColor(Color.WHITE);
+					mPaint.setAlpha(0xFF);
+					if (mBackgroundBmp.getHeight() != mScreenHeight) {
+						canvas.drawBitmap(
+								mBackgroundBmp,
+								(mScreenWidth - mBackgroundBmp.getWidth()) / 2,
+								(mPuzzleRect.top + mPuzzleRect.bottom - mBackgroundBmp
+										.getHeight()) / 2, mPaint);
+					} else {
+						canvas.drawBitmap(mBackgroundBmp, 0, 0, mPaint);
+					}
+					canvas.clipRect(mPuzzleRect, Op.UNION);
+					canvas.save();
+					newBmp = Bitmap.createBitmap(bmp, mPuzzleRect.left,
+							mPuzzleRect.top, mPuzzleRect.width(),
+							mPuzzleRect.height());
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			LogUtil.printCodeStack(e);
+		} finally {
+			if ((bmp != null) && (!bmp.isRecycled())) {
+				bmp.recycle();
+				bmp = null;
+			}
 		}
-		return bmp;
+
+		return newBmp;
 	}
 
 }
