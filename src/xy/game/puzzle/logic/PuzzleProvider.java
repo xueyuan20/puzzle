@@ -17,6 +17,7 @@ public class PuzzleProvider {
 	private final String KEY_GAME_LEVEL = "key_game_level";
 	private final String KEY_USE_DEFAULT_BK = "key_user_default_bk";
 	private final String KEY_CUSTOM_BK_PATH = "key_custom_bk_path";
+	private final String KEY_WETHER_USE_HINT = "key_wether_use_hint";
 
 	private PuzzleProvider(Context context) {
 		mContext = context;
@@ -50,8 +51,18 @@ public class PuzzleProvider {
 			mEditor.putInt(KEY_GAME_LEVEL, 0);
 			mEditor.putBoolean(KEY_USE_DEFAULT_BK, true);
 			mEditor.putString(KEY_CUSTOM_BK_PATH, null);
+			mEditor.putBoolean(KEY_WETHER_USE_HINT, false);
 			mEditor.commit();
 		}
+	}
+
+	public void changeHintType(boolean showHint){
+		mEditor.putBoolean(KEY_WETHER_USE_HINT, showHint);
+		mEditor.commit();
+	}
+
+	public boolean checkWetherUseHint(){
+		return mSharedPrefs.getBoolean(KEY_WETHER_USE_HINT, false);
 	}
 
 	/**

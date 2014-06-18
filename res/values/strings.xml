@@ -37,6 +37,12 @@
         <item >"相册"</item>
     </string-array>
 
+    <string name="menu_title_set_bk">"背景"</string>
+    <string name="menu_title_set_level">"等级"</string>
+    <string name="menu_title_restart">"重置"</string>
+    <string name="menu_title_screenshot">"截屏"</string>
+    <string name="menu_title_settings">"设置"</string>
+
     <string name="menu_title_back">"返回"</string>
     <string name="menu_title_share">"分享"</string>
     <string name="menu_title_delete">"删除"</string>
@@ -51,9 +57,11 @@
 
     <string name="preview">"预览"</string>
     <string name="set_image">"设置拼图"</string>
-    <string name="appdescription">"应用描述"</string>
+    <string name="appdescription">"应用说明"</string>
+
     <string name="udpate">"检查更新"</string>
     <string name="about">"关于"</string>
     <string name="feedback">"用户反馈"</string>
 
+    <string name="no_preview">"无预览"</string>
 </resources>

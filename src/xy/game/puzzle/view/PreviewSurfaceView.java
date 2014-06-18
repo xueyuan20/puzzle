@@ -4,6 +4,7 @@ import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.ScreenUtil;
+import xy.game.puzzle.util.StorageUtil;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -151,14 +152,18 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 							getWidth(), getHeight(), mPaint);
 					mCanvas.drawRect(mPuzzleRect.left, mPuzzleRect.bottom,
 							mPuzzleRect.right, getHeight(), mPaint);
-					int div = mPuzzleRect.width() / mPuzzleSize;
-					int left = mPuzzleRect.left;
-					int top = mPuzzleRect.top;
-					for (int i = 0; i < mPuzzleSize + 1; i++) {
-						mCanvas.drawLine(left, top + i * div, left
-								+ mPuzzleRect.width(), top + i * div, mPaint);
-						mCanvas.drawLine(left + i * div, top, left + i * div,
-								top + mPuzzleRect.width(), mPaint);
+
+					if (!mUseDefaultBmp) {
+						int div = mPuzzleRect.width() / mPuzzleSize;
+						int left = mPuzzleRect.left;
+						int top = mPuzzleRect.top;
+						for (int i = 0; i < mPuzzleSize + 1; i++) {
+							mCanvas.drawLine(left, top + i * div, left
+									+ mPuzzleRect.width(), top + i * div,
+									mPaint);
+							mCanvas.drawLine(left + i * div, top, left + i
+									* div, top + mPuzzleRect.width(), mPaint);
+						}
 					}
 				} else {
 					if ((mBackgroundBmp != null)
@@ -167,7 +172,9 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 					} else {
 						mPaint.setTextSize(30);
 						mPaint.setColor(Color.WHITE);
-						mCanvas.drawText("Not Found", getWidth() / 2,
+						String tip = mRes.getString(R.string.no_preview);
+						mCanvas.drawText(tip,
+								(getWidth() - tip.length() * 30) / 2,
 								getHeight() / 2, mPaint);
 					}
 				}
@@ -215,25 +222,26 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 
 	private void initParams() {
 		// TODO Auto-generated method stub
-		switch (PuzzleProvider.getInstance(mContext).getGameLevel()) {
+		PuzzleProvider provider = PuzzleProvider.getInstance(mContext);
+		switch (provider.getGameLevel()) {
 		case 0:
 			mPuzzleSize = 3;
-			mBackgroudResId = R.drawable.preview_33;
+			mBackgroudResId = R.drawable.background_33;
 			break;
 
 		case 1:
 			mPuzzleSize = 4;
-			mBackgroudResId = R.drawable.preview_44;
+			mBackgroudResId = R.drawable.background_44;
 			break;
 
 		case 2:
 			mPuzzleSize = 5;
-			mBackgroudResId = R.drawable.preview_55;
+			mBackgroudResId = R.drawable.background_55;
 			break;
 
 		default:
 			mPuzzleSize = 3;
-			mBackgroudResId = R.drawable.preview_33;
+			mBackgroudResId = R.drawable.background_33;
 			break;
 		}
 	}
@@ -254,7 +262,11 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		return super.onTouchEvent(event);
 	}
 
-	public void setBitmap(Bitmap bmp) {
+	/**
+	 * Set bitmap as background.
+	 * @param bmp
+	 */
+	private void setBitmap(Bitmap bmp) {
 		if (mIsPreviewMode) {
 			mBackgroundBmp = bmp;
 		} else {
@@ -269,23 +281,43 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		}
 	}
 
+	/**
+	 * Called to set bitmap as background.
+	 * @param userDefault
+	 * @param bmp
+	 */
 	public void setImageAsBackground(boolean userDefault, Bitmap bmp) {
 		mUseDefaultBmp = userDefault;
 		setBitmap(bmp);
 	}
 
-	public void setBackgroundByPath(String customBkPath) {
+	/**
+	 * Called to set bitmap for preview.
+	 * @param customBkPath
+	 */
+	public void setPreviewBmpByPath(String customBkPath) {
 		// TODO Auto-generated method stub
 		setImageAsBackground(false,
 				ScreenUtil.getBitmapByWidth(customBkPath, mScreenWidth, 0));
 	}
 
+	/**
+	 * Set default bitmap as background for puzzle.
+	 */
 	private void useDefaultImageBitmap() {
-		LogUtil.e("Screen Width = " + mScreenWidth);
-		setImageBitmap(ScreenUtil.getBitmap(mRes, mBackgroudResId,
-				mScreenWidth, 0));
+		String path = StorageUtil.getCacheFilePath(mPuzzleSize);
+		LogUtil.e("Screen Width = " + mScreenWidth + "[cache file path]"+path);
+		setImageBitmap(ScreenUtil.getBitmapByWidth(
+				path,
+				(mPuzzleRect==null)? 640 : mPuzzleRect.width(),
+				0));
 	}
 
+	/**
+	 * Set bitmap as background.
+	 * @param bmp
+	 * @return
+	 */
 	private boolean setImageBitmap(Bitmap bmp) {
 		if (bmp == null || bmp.isRecycled()) {
 			return false;
@@ -298,10 +330,17 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		return true;
 	}
 
+	/**
+	 * set whether using preview mode.
+	 * @param isPreview
+	 */
 	public void setPreviewMode(boolean isPreview) {
 		mIsPreviewMode = isPreview;
 	}
 
+	/**
+	 * Clear background bitmap after file was removed.
+	 */
 	public void showBrokenIcon() {
 		// TODO Auto-generated method stub
 		if (mBackgroundBmp != null && !mBackgroundBmp.isRecycled()) {
@@ -310,6 +349,10 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		}
 	}
 
+	/**
+	 * Get background bitmap, deal with cut.
+	 * @return
+	 */
 	public Bitmap getBackgroundBmp() {
 		Bitmap newBmp = null;
 		// if (mBackgroundBmp != null && !mBackgroundBmp.isRecycled()) {

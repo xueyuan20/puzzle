@@ -1,6 +1,9 @@
 package xy.game.puzzle;
 
+import xy.game.puzzle.logic.InitialDataTask;
+import xy.game.puzzle.logic.PuzzleProvider;
 import android.app.Application;
+import android.content.Context;
 
 public class PuzzleApplication extends Application {
 
@@ -8,6 +11,10 @@ public class PuzzleApplication extends Application {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+		Context context = getApplicationContext();
+		PuzzleProvider.getInstance(context);
+		InitialDataTask task = new InitialDataTask(context);
+		task.execute();
 	}
 
 	@Override

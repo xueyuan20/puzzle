@@ -21,7 +21,6 @@
     <!-- Fullscreen Page Theme -->
     <style name="FullscreenPage" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:screenOrientation">portrait</item>
         <item name="android:windowFullscreen">?android:windowNoTitle</item>
     </style>
 

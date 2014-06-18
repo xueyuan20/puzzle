@@ -104,6 +104,8 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	 */
 	private boolean mDataLockFlag = false;
 
+	private boolean mShowHint = false;
+
 	/**
 	 * 构造方法
 	 * 
@@ -199,7 +201,8 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 				if (mUnitIndexArray != null && !mDataLockFlag) {
 					mPaint.setColor(Color.WHITE);
 					mPaint.setTextAlign(Align.CENTER);
-					mPaint.setTextSize(mRes.getDimension(R.dimen.font_zise));
+					mPaint.setTextSize(mRes.getDimension(R.dimen.font_zise)
+							- 10 * (mPuzzleSize - 3));
 					mPaint.setStyle(Style.FILL);
 					if (PuzzleProvider.getInstance(mContext)
 							.checkUseDefaultBk()) {
@@ -218,13 +221,23 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 						if (mBmpPaint != null && mBmpPaint.length > 0) {
 							// LogUtil.e("Unsurportted!");
 							mPaint.setColor(Color.WHITE);
-							mPaint.setAlpha(0xFF);
+							mPaint.setAlpha(0xCC);
 							for (int i = 0; i < mUnitIndexArray.length; i++) {
 								if (mUnitIndexArray[i] > 0) {
 									mCanvas.drawBitmap(
 											mBmpPaint[mUnitIndexArray[i]],
 											mUnitRectArray[i].left(),
 											mUnitRectArray[i].top(), mPaint);
+									if (mShowHint) {										
+										mCanvas.drawText(
+												String.valueOf(mUnitIndexArray[i]),
+												mUnitRectArray[i].getRect()
+												.centerX(),
+												mUnitRectArray[i].getRect()
+												.centerY()
+												+ mPaint.getTextSize() / 3,
+												mPaint);
+									}
 								}
 							}
 						}
@@ -512,11 +525,6 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		}
 
 		/**
-		 * 初始化图片画笔
-		 */
-		initBmpPaint();
-
-		/**
 		 * initialize steps count.
 		 */
 		mScoreRecord = PuzzleProvider.getInstance(mContext).queryRecord();
@@ -546,6 +554,11 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		if (spaceCount > 1) {
 			LogUtil.e("Some Error Happened.");
 		}
+
+		/**
+		 * 初始化图片画笔
+		 */
+		initBmpPaint();
 	}
 
 	public void lockIndexData(boolean enableLock) {
@@ -567,11 +580,15 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 				}
 			}
 		}
+		PuzzleProvider provider = PuzzleProvider.getInstance(mContext);
 
+		if ((mUnitIndexArray == null) || (mUnitIndexArray.length < 1)) {
+			provider.setUseDefaultBk(true);
+			return;
+		}
 		/**
 		 * 初始化画笔
 		 */
-		PuzzleProvider provider = PuzzleProvider.getInstance(mContext);
 		String path = provider.getCustomBkPath();
 		LogUtil.e("default [" + provider.checkUseDefaultBk() + "] path: "
 				+ provider.getCustomBkPath());
@@ -586,9 +603,8 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 							mUnitRectArray[i - 1].left() - mPuzzleRect.left,
 							mUnitRectArray[i - 1].top() - mPuzzleRect.top,
 							mGridSize, mGridSize);
-
-//					StorageUtil.saveToTmpPath((Activity) mContext,
-//							mBmpPaint[i], "background_" + String.valueOf(i));
+					// StorageUtil.saveToTmpPath((Activity) mContext,
+					// mBmpPaint[i], "background_" + String.valueOf(i));
 				}
 			}
 		}
@@ -718,7 +734,8 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 				// 绘制number
 				if (mUnitIndexArray != null && !mDataLockFlag) {
 					mPaint.setTextAlign(Align.CENTER);
-					mPaint.setTextSize(mRes.getDimension(R.dimen.font_zise));
+					mPaint.setTextSize(mRes.getDimension(R.dimen.font_zise)
+							- 10 * (mPuzzleSize - 3));
 					mPaint.setStyle(Style.FILL);
 					mPaint.setColor(Color.WHITE);
 					for (int i = 0; i < mUnitIndexArray.length; i++) {
@@ -757,7 +774,11 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	}
 
 	public void savePuzzle() {
-		PuzzleProvider provider = PuzzleProvider.getInstance(mContext);
-		provider.savePuzzle(mUnitIndexArray, mScoreRecord);
+		PuzzleProvider.getInstance(mContext).savePuzzle(mUnitIndexArray,
+				mScoreRecord);
+	}
+
+	public void setShowHint(Boolean showHint){
+		mShowHint = showHint;
 	}
 }

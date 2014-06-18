@@ -1,8 +1,12 @@
 package xy.game.puzzle.activity;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.logic.ScreenShotAsyncTask;
+import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.MessageUtils;
 import xy.game.puzzle.util.ScreenUtil;
 import xy.game.puzzle.view.PuzzleSurfaceView;
@@ -23,11 +27,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
-	private TextView mTvOriginalBmp;
+	private TextView mTvMore, mTvHint;
 	private TextView mTvSteps, mTvTimer;
-	private TextView mTvSetLevel, mTvSetBg, mTvRestart, mTvSettings;
+	private TextView mTvSetLevel, mTvSetBackground, mTvRestart, mTvScreenshot;
 
 	private PuzzleSurfaceView mPuzzleView;
 
@@ -35,6 +40,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private Context mContext;
 	private boolean mEnableTimer;
 	private String mResultContent = "";
+	private PuzzleProvider mProvider;
 
 	private Handler mHandler = new Handler() {
 
@@ -80,8 +86,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			case MessageUtils.MSG_CHANGE_LEVEL:
 				int level = msg.getData().getInt(MessageUtils.KEY_GAME_LEVEL);
-				PuzzleProvider.getInstance(MainActivity.this).setGameLevel(
-						level);
+				mProvider.setGameLevel(level);
 				switch (level) {
 				case 0:
 					mPuzzleView.setLevel(DIFFICULTY_LEVEL.SIMPLE);
@@ -126,6 +131,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 		mRes = getResources();
 		mContext = this;
+		mProvider = PuzzleProvider.getInstance(this);
 
 		initViews();
 	}
@@ -133,9 +139,10 @@ public class MainActivity extends Activity implements OnClickListener {
 	private void initViews() {
 		// TODO Auto-generated method stub
 		mPuzzleView = (PuzzleSurfaceView) findViewById(R.id.puzzle_surfaceview);
+		mPuzzleView.setShowHint(mProvider.checkUseDefaultBk());
 
-		mTvOriginalBmp = (TextView) findViewById(R.id.tv_original_background);
-		mTvOriginalBmp.setOnClickListener(this);
+		mTvSetBackground = (TextView) findViewById(R.id.tv_original_background);
+		mTvSetBackground.setOnClickListener(this);
 
 		mTvSteps = (TextView) findViewById(R.id.tv_steps);
 		mTvSteps.setText(String.format(mRes.getString(R.string.title_steps), 0));
@@ -146,14 +153,19 @@ public class MainActivity extends Activity implements OnClickListener {
 		mTvSetLevel = (TextView) findViewById(R.id.tv_game_level);
 		mTvSetLevel.setOnClickListener(this);
 
-		mTvSetBg = (TextView) findViewById(R.id.tv_screenshot);
-		mTvSetBg.setOnClickListener(this);
+		mTvScreenshot = (TextView) findViewById(R.id.tv_screenshot);
+		mTvScreenshot.setOnClickListener(this);
 
 		mTvRestart = (TextView) findViewById(R.id.tv_game_restart);
 		mTvRestart.setOnClickListener(this);
 
-		mTvSettings = (TextView) findViewById(R.id.tv_game_settings);
-		mTvSettings.setOnClickListener(this);
+		mTvMore = (TextView) findViewById(R.id.tv_game_more);
+		mTvMore.setOnClickListener(this);
+
+		mTvHint = (TextView) findViewById(R.id.tv_game_hint);
+		mTvHint.setBackgroundResource(mProvider.checkUseDefaultBk() ? R.drawable.selector_hint
+				: R.drawable.selector_no_hint);
+		mTvHint.setOnClickListener(this);
 
 		mHandler.sendEmptyMessage(MessageUtils.MSG_START_TIMER);
 	}
@@ -179,7 +191,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					.setIcon(mRes.getDrawable(R.drawable.selector_game_level))
 					.setSingleChoiceItems(
 							mRes.getStringArray(R.array.game_level_choices),
-							PuzzleProvider.getInstance(this).getGameLevel(),
+							mProvider.getGameLevel(),
 							new DialogInterface.OnClickListener() {
 
 								@Override
@@ -207,19 +219,58 @@ public class MainActivity extends Activity implements OnClickListener {
 			mPuzzleView.restart();
 			break;
 
-		case R.id.tv_game_settings:
+		case R.id.tv_game_more:
 			startActivity(new Intent(MainActivity.this, AboutActivity.class));
 			break;
 
+		case R.id.tv_game_hint:
+			boolean showHint = !mProvider.checkWetherUseHint();
+			LogUtil.e("Change whether to show hint: "+showHint);
+			mProvider.changeHintType(showHint);
+			mTvHint.setBackgroundResource(showHint ? R.drawable.selector_hint
+					: R.drawable.selector_no_hint);
+			mPuzzleView.setShowHint(showHint);
+			break;
 		default:
 			break;
 		}
 	}
 
+	/**
+	 * 菜单、返回键响应
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		return super.onKeyDown(keyCode, event);
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+			exitBy2Click(); // 调用双击退出函数
+		}
+		return false;
+	}
+
+	/**
+	 * 双击退出函数
+	 */
+	private static Boolean isExit = false;
+
+	private void exitBy2Click() {
+		Timer tExit = null;
+		if (isExit == false) {
+			isExit = true; // 准备退出
+			tExit = new Timer();
+			tExit.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					isExit = false; // 取消退出
+				}
+			}, 1000); // 如果1秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+
+		} else {
+			mPuzzleView.savePuzzle();
+			finish();
+			System.exit(0);
+		}
 	}
 
 	public final Handler getHandler() {

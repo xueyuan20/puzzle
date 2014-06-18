@@ -89,7 +89,7 @@ public class PreviewActivity extends Activity implements OnClickListener {
 			if (provider.checkUseDefaultBk()) {
 				setDefaultPreview();
 			} else {
-				mSvPreview.setBackgroundByPath(provider.getCustomBkPath());
+				mSvPreview.setPreviewBmpByPath(provider.getCustomBkPath());
 			}
 		}
 	}
@@ -156,7 +156,6 @@ public class PreviewActivity extends Activity implements OnClickListener {
 		case R.drawable.ic_menu_share_holo:
 			ScreenUtil.shareMsg(PreviewActivity.this, getTitle().toString(),
 					"test", "testContent", mFilePath);
-
 			break;
 		case R.drawable.ic_menu_delete:
 			File delFile = new File(mFilePath);

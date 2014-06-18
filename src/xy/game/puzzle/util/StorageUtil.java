@@ -8,10 +8,14 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 
 public class StorageUtil {
-	private static final String APP_ROOT = "/Puzzle";
+	private static final String APP_ROOT = "/xy.game.Puzzle";
 	private static final String SCREEN_SHOT_PATH = "/ScreenShots";
 	private static final String TMP = "/tmp";
 	private static final String BACKGROUND_FILE_NAME = "background";
+	private static final String CACHE_DIR = "/.cache";
+
+	public static final String[] DEFAULT_BK_NAME = new String[] {
+			"default_33", "default_44", "default_55" };
 
 	private static String initAppPath() {
 		// 判断SDCard是否存在
@@ -63,11 +67,32 @@ public class StorageUtil {
 		return path;
 	}
 
+	private static String initPath(final String path){
+		String appRoot = initAppPath();
+		if (appRoot == null) {
+			return null;
+		}
+		String newPath = null;
+		if (!path.startsWith("/")) {
+			newPath = appRoot + "/"+path;
+		} else {
+			newPath = appRoot+path;
+		}
+
+		File file = new File(newPath);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+
+		return newPath;
+	}
+
 	/**
 	 * 
 	 * @param activity
 	 * @param bmp
-	 * @param fileName , xx.png
+	 * @param fileName
+	 *            , xx.png
 	 * @return
 	 */
 	public static String saveToTmpPath(Activity activity, Bitmap bmp,
@@ -84,7 +109,8 @@ public class StorageUtil {
 	 * 
 	 * @param activity
 	 * @param bmp
-	 * @param fileName, xx.png
+	 * @param fileName
+	 *            , xx.png
 	 * @return
 	 */
 	public static String saveTmpToScreenShot(Activity activity, Bitmap bmp,
@@ -101,12 +127,14 @@ public class StorageUtil {
 	 * 
 	 * @param savePath
 	 * @param bmp
-	 * @param fileName, file.png
+	 * @param fileName
+	 *            , file.png
 	 * @return
 	 */
 	private static String saveBmpToSDcard(String savePath, Bitmap bmp,
 			String fileName) {
-		LogUtil.e("save image file. [path: "+savePath + ", fileName: "+ fileName);
+		LogUtil.e("save image file. [path: " + savePath + ", fileName: "
+				+ fileName);
 		// 保存Bitmap
 		try {
 			File path = new File(savePath);
@@ -134,7 +162,6 @@ public class StorageUtil {
 		return null;
 	}
 
-
 	/**
 	 * 获取SDCard的目录路径功能
 	 * 
@@ -149,6 +176,28 @@ public class StorageUtil {
 			sdcardDir = Environment.getExternalStorageDirectory();
 		}
 		return sdcardDir.toString();
+	}
+
+	public static String saveCacheFile(Bitmap bmpFile, String fileName){
+		if (bmpFile == null || bmpFile.isRecycled()) {
+			return null;
+		}
+		// 图片存储路径
+		String savePath = initPath(CACHE_DIR);
+		return saveBmpToSDcard(savePath, bmpFile, fileName);
+	}
+
+	public static boolean isCacheFileExist(String fileName){
+		File file = new File(initPath(CACHE_DIR)+"/"+fileName);
+		return file.exists();
+	}
+
+	public static String getCacheFilePath(final int size){
+		String path = initPath(CACHE_DIR)+"/"+DEFAULT_BK_NAME[size%3]+".png";
+		if ((new File(path)).exists()) {
+			return path;
+		}
+		return null;
 	}
 
 	public static String saveBackground(Bitmap backgroundBmp) {

@@ -11,17 +11,26 @@
         android:layout_height="fill_parent" />
 
     <TextView
-        android:id="@+id/tv_game_settings"
+        android:id="@+id/tv_game_hint"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_alignBottom="@+id/tv_steps"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/selector_settings"
+        android:background="@drawable/selector_hint"
+        android:padding="@dimen/icon_div" />
+
+    <TextView
+        android:id="@+id/tv_game_more"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_alignBottom="@+id/tv_steps"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/selector_more"
         android:padding="@dimen/icon_div" />
 
     <TextView
         android:id="@+id/tv_steps"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/title_border_top"
         android:gravity="bottom|center_horizontal"
         android:text="@string/title_steps"
