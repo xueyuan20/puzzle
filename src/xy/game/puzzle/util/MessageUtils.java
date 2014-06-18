@@ -24,6 +24,8 @@ public class MessageUtils {
 
 	public static final int MSG_INIT_TIMER = 104;
 
+	public static final int MSG_HIDE_HINT = 105;
+
 	/**
 	 * keywords.
 	 */

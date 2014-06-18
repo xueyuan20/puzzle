@@ -64,4 +64,5 @@
     <string name="feedback">"用户反馈"</string>
 
     <string name="no_preview">"无预览"</string>
+    <string name="exit_hint">"再按一次退出程序"</string>
 </resources>

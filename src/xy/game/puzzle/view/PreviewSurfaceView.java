@@ -201,7 +201,6 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		// TODO Auto-generated method stub
 		mScreenHeight = getHeight();
 		mScreenWidth = getWidth();
-		LogUtil.e("width = " + mScreenWidth + "; height = " + mScreenHeight);
 
 		int borderTop = (int) mRes.getDimension(R.dimen.top_border_height);
 		int borderLeft = (int) mRes.getDimension(R.dimen.left_border_width);
@@ -244,6 +243,9 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 			mBackgroudResId = R.drawable.background_33;
 			break;
 		}
+		if (!provider.checkUseDefaultBk()) {
+			setCustomBmpAsBkByPath(provider.getCustomBkPath());
+		}
 	}
 
 	@Override
@@ -264,25 +266,34 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 
 	/**
 	 * Set bitmap as background.
+	 * 
 	 * @param bmp
 	 */
 	private void setBitmap(Bitmap bmp) {
-		if (mIsPreviewMode) {
-			mBackgroundBmp = bmp;
-		} else {
-			if (mUseDefaultBmp) {
-				initParams();
-				useDefaultImageBitmap();
-			} else {
-				if (!setImageBitmap(bmp)) {
-					mUseDefaultBmp = false;
-				}
-			}
+		clearBitmap(mBackgroundBmp);
+
+		mBackgroundBmp = bmp;
+	}
+
+	private void clearBitmap(Bitmap bmp){
+		if ((bmp!=null) && !bmp.isRecycled()) {
+			bmp.recycle();
+			bmp = null;
 		}
+	}
+	/**
+	 * Called to set bitmap as background.
+	 * @param userDefault
+	 * @param customBkPath
+	 */
+	public void setCustomBmpAsBkByPath(String customBkPath) {
+		mUseDefaultBmp = false;
+		setImageBitmap(ScreenUtil.getBitmapByWidth(customBkPath, mScreenWidth, 0));
 	}
 
 	/**
 	 * Called to set bitmap as background.
+	 * 
 	 * @param userDefault
 	 * @param bmp
 	 */
@@ -293,6 +304,7 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 
 	/**
 	 * Called to set bitmap for preview.
+	 * 
 	 * @param customBkPath
 	 */
 	public void setPreviewBmpByPath(String customBkPath) {
@@ -306,15 +318,14 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 	 */
 	private void useDefaultImageBitmap() {
 		String path = StorageUtil.getCacheFilePath(mPuzzleSize);
-		LogUtil.e("Screen Width = " + mScreenWidth + "[cache file path]"+path);
-		setImageBitmap(ScreenUtil.getBitmapByWidth(
-				path,
-				(mPuzzleRect==null)? 640 : mPuzzleRect.width(),
-				0));
+		LogUtil.e("Screen Width = " + mScreenWidth + "[cache file path]" + path);
+		setBitmap(ScreenUtil.getBitmapByWidth(path,
+				(mPuzzleRect == null) ? 640 : mPuzzleRect.width(), 0));
 	}
 
 	/**
 	 * Set bitmap as background.
+	 * 
 	 * @param bmp
 	 * @return
 	 */
@@ -322,16 +333,14 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		if (bmp == null || bmp.isRecycled()) {
 			return false;
 		}
-		if (mBackgroundBmp != null && !mBackgroundBmp.isRecycled()) {
-			mBackgroundBmp.recycle();
-			mBackgroundBmp = null;
-		}
+		clearBitmap(mBackgroundBmp);
 		mBackgroundBmp = bmp;
 		return true;
 	}
 
 	/**
 	 * set whether using preview mode.
+	 * 
 	 * @param isPreview
 	 */
 	public void setPreviewMode(boolean isPreview) {
@@ -343,14 +352,12 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 	 */
 	public void showBrokenIcon() {
 		// TODO Auto-generated method stub
-		if (mBackgroundBmp != null && !mBackgroundBmp.isRecycled()) {
-			mBackgroundBmp.recycle();
-			mBackgroundBmp = null;
-		}
+		clearBitmap(mBackgroundBmp);
 	}
 
 	/**
 	 * Get background bitmap, deal with cut.
+	 * 
 	 * @return
 	 */
 	public Bitmap getBackgroundBmp() {
@@ -394,10 +401,7 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 			// TODO: handle exception
 			LogUtil.printCodeStack(e);
 		} finally {
-			if ((bmp != null) && (!bmp.isRecycled())) {
-				bmp.recycle();
-				bmp = null;
-			}
+			clearBitmap(bmp);
 		}
 
 		return newBmp;

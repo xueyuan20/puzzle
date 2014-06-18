@@ -39,6 +39,7 @@ public class PreviewActivity extends Activity implements OnClickListener {
 	private String mFilePath;
 
 	private Resources mRes;
+	private PuzzleProvider mProvider;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class PreviewActivity extends Activity implements OnClickListener {
 
 		setContentView(R.layout.activity_preview);
 		mRes = getResources();
+		mProvider = PuzzleProvider.getInstance(this);
 
 		// mIvPreview = (ImageView) findViewById(R.id.iv_preview);
 		mSvPreview = (PreviewSurfaceView) findViewById(R.id.preview);
@@ -85,11 +87,8 @@ public class PreviewActivity extends Activity implements OnClickListener {
 			task.execute(mFilePath);
 		} else {
 			mTvPageTitle.setText(mRes.getString(R.string.set_image));
-			PuzzleProvider provider = PuzzleProvider.getInstance(this);
-			if (provider.checkUseDefaultBk()) {
+			if (mProvider.checkUseDefaultBk()) {
 				setDefaultPreview();
-			} else {
-				mSvPreview.setPreviewBmpByPath(provider.getCustomBkPath());
 			}
 		}
 	}
@@ -192,9 +191,9 @@ public class PreviewActivity extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		LogUtil.e("[PreviewActivity] requestCode:" + requestCode + "resultCode"
-				+ resultCode);
 		if (resultCode == RESULT_OK) {
+			LogUtil.e("[PreviewActivity] requestCode:" + requestCode
+					+ "resultCode" + resultCode);
 			switch (requestCode) {
 			case MessageUtils.CODE_FROM_CAMERA:
 				// RefreshByLocalFileTask task = new RefreshByLocalFileTask(

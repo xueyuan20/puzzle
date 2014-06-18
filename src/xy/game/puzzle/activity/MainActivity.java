@@ -1,8 +1,5 @@
 package xy.game.puzzle.activity;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.logic.ScreenShotAsyncTask;
@@ -17,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,11 +23,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
 	private TextView mTvMore, mTvHint;
 	private TextView mTvSteps, mTvTimer;
+	private TextView mTvOperatorHint;
 	private TextView mTvSetLevel, mTvSetBackground, mTvRestart, mTvScreenshot;
 
 	private PuzzleSurfaceView mPuzzleView;
@@ -41,6 +37,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	private boolean mEnableTimer;
 	private String mResultContent = "";
 	private PuzzleProvider mProvider;
+
+	/**
+	 * 双击退出函数
+	 */
+	private static long mBackTime = 0;
 
 	private Handler mHandler = new Handler() {
 
@@ -116,6 +117,9 @@ public class MainActivity extends Activity implements OnClickListener {
 				}
 				break;
 
+			case MessageUtils.MSG_HIDE_HINT:
+				mTvOperatorHint.setVisibility(View.GONE);
+				break;
 			default:
 				break;
 			}
@@ -149,6 +153,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		mTvTimer = (TextView) findViewById(R.id.tv_timer);
 		mTvTimer.setText("00:00");
+
+		mTvOperatorHint = (TextView) findViewById(R.id.tv_operate_hint);
+		mTvOperatorHint.setVisibility(View.GONE);
 
 		mTvSetLevel = (TextView) findViewById(R.id.tv_game_level);
 		mTvSetLevel.setOnClickListener(this);
@@ -225,7 +232,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		case R.id.tv_game_hint:
 			boolean showHint = !mProvider.checkWetherUseHint();
-			LogUtil.e("Change whether to show hint: "+showHint);
+			LogUtil.e("Change whether to show hint: " + showHint);
 			mProvider.changeHintType(showHint);
 			mTvHint.setBackgroundResource(showHint ? R.drawable.selector_hint
 					: R.drawable.selector_no_hint);
@@ -243,74 +250,25 @@ public class MainActivity extends Activity implements OnClickListener {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-			exitBy2Click(); // 调用双击退出函数
+			// Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+			long time = System.currentTimeMillis();
+			LogUtil.e("[debug] current time : "+ String.valueOf(time));
+			if ((time - mBackTime > 1000) || (time - mBackTime < 50)) {
+				mBackTime = time; 
+				mTvOperatorHint.setVisibility(View.VISIBLE);
+				mHandler.sendEmptyMessageDelayed(MessageUtils.MSG_HIDE_HINT,
+						1000);
+			} else {
+				mPuzzleView.savePuzzle();
+				finish();
+				System.exit(0);
+			}
 		}
 		return false;
 	}
 
-	/**
-	 * 双击退出函数
-	 */
-	private static Boolean isExit = false;
-
-	private void exitBy2Click() {
-		Timer tExit = null;
-		if (isExit == false) {
-			isExit = true; // 准备退出
-			tExit = new Timer();
-			tExit.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					isExit = false; // 取消退出
-				}
-			}, 1000); // 如果1秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
-
-		} else {
-			mPuzzleView.savePuzzle();
-			finish();
-			System.exit(0);
-		}
-	}
-
 	public final Handler getHandler() {
 		return mHandler;
-	}
-
-	class GameTimer extends AsyncTask<String, String, String> {
-		int mTimerCount;
-		TextView mTimer;
-
-		public GameTimer(TextView tvTimer) {
-			// TODO Auto-generated constructor stub
-			this.mTimer = tvTimer;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-			mTimerCount = 0;
-		}
-
-		@Override
-		protected String doInBackground(String... arg0) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected void onCancelled() {
-			// TODO Auto-generated method stub
-			super.onCancelled();
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-		}
-
 	}
 
 	public void startTimer() {

@@ -47,6 +47,14 @@
         android:textColor="#55333333"
         android:textSize="16sp" />
 
+    <TextView android:id="@+id/tv_operate_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exit_hint"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/top_border_height"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="@dimen/top_border_height"
