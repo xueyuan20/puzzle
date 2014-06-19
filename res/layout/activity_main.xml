@@ -51,10 +51,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/exit_hint"
+        android:textColor="@color/title_text_color"
+        android:textSize="@dimen/content_text_size"
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/top_border_height"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="@dimen/top_border_height"
