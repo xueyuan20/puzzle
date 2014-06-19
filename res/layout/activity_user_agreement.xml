@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
+
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="@color/half_white"
-        android:gravity="center">
-        <Button android:id="@+id/btn_read"
-	        android:layout_height="@dimen/button_height"
-	        android:layout_width="@dimen/button_width"
-	        android:text="@string/ok"/>
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/left_border_width"
+        android:orientation="vertical" >
+
+        <WebView
+            android:id="@+id/wv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
     </LinearLayout>
 
-
-    <WebView android:id="@+id/wv_content"
-        android:layout_marginBottom="@dimen/toolbar_height"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_alignParentBottom="true"
+        android:background="@color/grydk"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/btn_read"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:background="@drawable/white_button_style"
+            android:text="@string/ok"
+             />
+    </LinearLayout>
+
 </RelativeLayout>

@@ -1,16 +1,17 @@
 package xy.game.puzzle.activity;
 
 import xy.game.puzzle.R;
-import android.app.Activity;
+import xy.game.puzzle.util.LogUtil;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AboutActivity extends Activity implements OnClickListener {
+public class AboutActivity extends SlideBaseActivity implements OnClickListener {
 	private Context mContext;
 	private TextView mTvFeedback, mTvAppdesc, mTvUpdate;
 

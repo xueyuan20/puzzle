@@ -22,13 +22,14 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener {
-	private TextView mTvMore, mTvHint;
+	private ImageView mTvMore, mTvHint;
 	private TextView mTvSteps, mTvTimer;
 	private TextView mTvOperatorHint;
-	private TextView mTvSetLevel, mTvSetBackground, mTvRestart, mTvScreenshot;
+	private ImageView mTvSetLevel, mTvSetBackground, mTvRestart, mTvScreenshot;
 
 	private PuzzleSurfaceView mPuzzleView;
 
@@ -145,9 +146,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		mPuzzleView = (PuzzleSurfaceView) findViewById(R.id.puzzle_surfaceview);
 		mPuzzleView.setShowHint(mProvider.checkUseDefaultBk());
 
-		mTvSetBackground = (TextView) findViewById(R.id.tv_original_background);
-		mTvSetBackground.setOnClickListener(this);
-
 		mTvSteps = (TextView) findViewById(R.id.tv_steps);
 		mTvSteps.setText(String.format(mRes.getString(R.string.title_steps), 0));
 
@@ -157,21 +155,25 @@ public class MainActivity extends Activity implements OnClickListener {
 		mTvOperatorHint = (TextView) findViewById(R.id.tv_operate_hint);
 		mTvOperatorHint.setVisibility(View.GONE);
 
-		mTvSetLevel = (TextView) findViewById(R.id.tv_game_level);
+		// mTvSetLevel = (TextView) findViewById(R.id.tv_game_level);
+		mTvSetLevel = (ImageView) findViewById(R.id.tv_game_level);
 		mTvSetLevel.setOnClickListener(this);
 
-		mTvScreenshot = (TextView) findViewById(R.id.tv_screenshot);
-		mTvScreenshot.setOnClickListener(this);
+		mTvSetBackground = (ImageView) findViewById(R.id.tv_original_background);
+		mTvSetBackground.setOnClickListener(this);
 
-		mTvRestart = (TextView) findViewById(R.id.tv_game_restart);
+		mTvRestart = (ImageView) findViewById(R.id.tv_game_restart);
 		mTvRestart.setOnClickListener(this);
 
-		mTvMore = (TextView) findViewById(R.id.tv_game_more);
+		mTvScreenshot = (ImageView) findViewById(R.id.tv_screenshot);
+		mTvScreenshot.setOnClickListener(this);
+
+		mTvMore = (ImageView) findViewById(R.id.tv_game_more);
 		mTvMore.setOnClickListener(this);
 
-		mTvHint = (TextView) findViewById(R.id.tv_game_hint);
-		mTvHint.setBackgroundResource(mProvider.checkUseDefaultBk() ? R.drawable.selector_hint
-				: R.drawable.selector_no_hint);
+		mTvHint = (ImageView) findViewById(R.id.tv_game_hint);
+		mTvHint.setImageResource(mProvider.checkWetherUseHint() ? R.drawable.ic_menu_hint_yes
+				: R.drawable.ic_menu_hint_no);
 		mTvHint.setOnClickListener(this);
 
 		mHandler.sendEmptyMessage(MessageUtils.MSG_START_TIMER);
@@ -195,7 +197,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.tv_game_level:
 			new AlertDialog.Builder(MainActivity.this)
 					.setTitle(mRes.getString(R.string.title_game_level))
-					.setIcon(mRes.getDrawable(R.drawable.selector_game_level))
+					.setIcon(mRes.getDrawable(R.drawable.ic_settings_level))
 					.setSingleChoiceItems(
 							mRes.getStringArray(R.array.game_level_choices),
 							mProvider.getGameLevel(),
@@ -234,8 +236,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			boolean showHint = !mProvider.checkWetherUseHint();
 			LogUtil.e("Change whether to show hint: " + showHint);
 			mProvider.changeHintType(showHint);
-			mTvHint.setBackgroundResource(showHint ? R.drawable.selector_hint
-					: R.drawable.selector_no_hint);
+			mTvHint.setImageResource(showHint ? R.drawable.ic_menu_hint_yes
+					: R.drawable.ic_menu_hint_no);
 			mPuzzleView.setShowHint(showHint);
 			break;
 		default:
@@ -250,11 +252,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
 			long time = System.currentTimeMillis();
-			LogUtil.e("[debug] current time : "+ String.valueOf(time));
 			if ((time - mBackTime > 1000) || (time - mBackTime < 50)) {
-				mBackTime = time; 
+				mBackTime = time;
 				mTvOperatorHint.setVisibility(View.VISIBLE);
 				mHandler.sendEmptyMessageDelayed(MessageUtils.MSG_HIDE_HINT,
 						1000);

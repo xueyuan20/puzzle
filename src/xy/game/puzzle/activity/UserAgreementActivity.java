@@ -1,14 +1,13 @@
 package xy.game.puzzle.activity;
 
 import xy.game.puzzle.R;
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
 
-public class UserAgreementActivity extends Activity {
+public class UserAgreementActivity extends SlideBaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

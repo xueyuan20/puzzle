@@ -9,6 +9,7 @@
 
     <!-- icon size -->
     <dimen name="icon_size">48dip</dimen>
+    <dimen name="small_icon_size">32dip</dimen>
     <dimen name="icon_div">16dip</dimen>
 
     <dimen name="title_border_top">80dip</dimen>
@@ -30,8 +31,8 @@
     <dimen name="title_height">48dip</dimen>
 
     <!-- ToolBar -->
-    <dimen name="toolbar_height">72dip</dimen>
-    <dimen name="button_height">52dip</dimen>
+    <dimen name="toolbar_height">64dip</dimen>
+    <dimen name="button_height">40dip</dimen>
     <dimen name="button_width">240dip</dimen>
 
     <!-- menu item -->

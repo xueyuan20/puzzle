@@ -3,8 +3,10 @@
     <color name="title_text_color">#88000000</color>
     <color name="content_text_color">#CC555555</color>
     <color name="white">#FBFBFB</color>
-    <color name="half_white">#55FFFFFF</color>
+    <color name="half_white">#55FEFEFE</color>
     <color name="half_dark">#33000000</color>
+    <color name="grydk">#AA000000</color>
     <color name="off_white">#FFF8F3D1</color>
     <color name="cream_coloured">#FFF8F3D1</color>
+    <color name="light_brown">#55555555</color>
 </resources>

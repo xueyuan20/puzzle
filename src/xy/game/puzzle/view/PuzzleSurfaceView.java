@@ -447,10 +447,13 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	 * @param isNew
 	 */
 	private void initPuzzle(boolean isNew) {
+		PuzzleProvider provider = PuzzleProvider.getInstance(mContext);
+		mShowHint = provider.checkWetherUseHint();
+		
 		/**
 		 * initialize puzzle size.
 		 */
-		switch (PuzzleProvider.getInstance(mContext).getGameLevel()) {
+		switch (provider.getGameLevel()) {
 		case 0:
 			mPuzzleSize = 3;
 			break;
@@ -513,7 +516,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		 * ≥ı ºªØ∆¥Õº–Ú¡–
 		 */
 		if (!isNew) {
-			int[] array = PuzzleProvider.getInstance(mContext).getArray();
+			int[] array = provider.getArray();
 			if ((array != null) && (array.length == mPuzzleSize * mPuzzleSize)) {
 				setIndexArray(array);
 			} else {
@@ -527,7 +530,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		/**
 		 * initialize steps count.
 		 */
-		mScoreRecord = PuzzleProvider.getInstance(mContext).queryRecord();
+		mScoreRecord = provider.queryRecord();
 		if (mScoreRecord == null) {
 			mScoreRecord = new RecordItem(mPuzzleSize, 0, 0);
 			updateStepsView(0);

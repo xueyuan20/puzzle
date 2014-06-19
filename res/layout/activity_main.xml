@@ -10,23 +10,29 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <TextView
+    <ImageView
         android:id="@+id/tv_game_hint"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="@dimen/small_icon_size"
+        android:layout_height="@dimen/small_icon_size"
+        android:layout_marginLeft="@dimen/icon_div"
         android:layout_alignBottom="@+id/tv_steps"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/selector_hint"
-        android:padding="@dimen/icon_div" />
+        android:layout_alignLeft="@dimen/left_border_width"
+        android:background="@drawable/selector_circle_background"
+        android:contentDescription="@string/menu_title_hint"
+        android:src="@drawable/ic_menu_hint_yes" />
 
-    <TextView
+    <ImageView
         android:id="@+id/tv_game_more"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="@dimen/small_icon_size"
+        android:layout_height="@dimen/small_icon_size"
+        android:layout_marginRight="@dimen/icon_div"
         android:layout_alignBottom="@+id/tv_steps"
         android:layout_alignParentRight="true"
-        android:background="@drawable/selector_more"
-        android:padding="@dimen/icon_div" />
+        android:layout_alignRight="@dimen/left_border_width"
+        android:src="@drawable/ic_menu_more_light"
+        android:contentDescription="@string/menu_title_more"
+        android:background="@drawable/selector_circle_background" />
 
     <TextView
         android:id="@+id/tv_steps"
@@ -65,33 +71,41 @@
         android:layout_centerHorizontal="true"
         android:orientation="horizontal" >
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_game_level"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_margin="@dimen/icon_div"
-            android:background="@drawable/selector_game_level" />
+            android:contentDescription="@string/menu_title_set_level"
+            android:src="@drawable/ic_settings_level"
+            android:background="@drawable/selector_menu_background" />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_original_background"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_margin="@dimen/icon_div"
-            android:background="@drawable/selector_original_bk" />
+            android:contentDescription="@string/menu_title_set_bk"
+            android:src="@drawable/ic_menu_gallery"
+            android:background="@drawable/selector_menu_background" />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_game_restart"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_margin="@dimen/icon_div"
-            android:background="@drawable/selector_restart" />
+            android:contentDescription="@string/menu_title_restart"
+            android:src="@drawable/ic_home_restart"
+            android:background="@drawable/selector_menu_background" />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_screenshot"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_margin="@dimen/icon_div"
-            android:background="@drawable/selector_set_background" />
+            android:contentDescription="@string/menu_title_screenshot"
+            android:src="@drawable/ic_camera_normal"
+            android:background="@drawable/selector_menu_background" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -65,4 +65,7 @@
 
     <string name="no_preview">"无预览"</string>
     <string name="exit_hint">"再按一次退出程序"</string>
+
+    <string name="menu_title_hint">"提示"</string>
+    <string name="menu_title_more">"更多"</string>
 </resources>
