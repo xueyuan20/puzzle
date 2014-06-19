@@ -1,10 +1,10 @@
 package xy.game.puzzle.view;
 
 import xy.game.puzzle.R;
-import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.ScreenUtil;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.ImageView;
@@ -92,6 +92,7 @@ public final class FloatMenuItem extends RelativeLayout {
 		tv.setLayoutParams(params);
 
 		tv.setId(mTextId);
+		tv.setTextColor(Color.WHITE);
 	}
 
 	private void initImageView(ImageView img) {
