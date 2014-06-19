@@ -317,7 +317,7 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 	 * Set default bitmap as background for puzzle.
 	 */
 	private void useDefaultImageBitmap() {
-		String path = StorageUtil.getCacheFilePath(mPuzzleSize);
+		String path = StorageUtil.getInstance().getCacheFilePath(mPuzzleSize);
 		LogUtil.e("Screen Width = " + mScreenWidth + "[cache file path]" + path);
 		setBitmap(ScreenUtil.getBitmapByWidth(path,
 				(mPuzzleRect == null) ? 640 : mPuzzleRect.width(), 0));

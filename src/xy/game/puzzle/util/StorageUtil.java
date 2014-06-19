@@ -2,89 +2,72 @@ package xy.game.puzzle.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
 public class StorageUtil {
-	private static final String APP_ROOT = "/xy.game.Puzzle";
-	private static final String SCREEN_SHOT_PATH = "/ScreenShots";
-	private static final String TMP = "/tmp";
-	private static final String BACKGROUND_FILE_NAME = "background";
-	private static final String CACHE_DIR = "/.cache";
+	private final String APP_ROOT = "/xy.game.Puzzle";
+	private final String SCREEN_SHOT_PATH = "/ScreenShots";
+	private final String CACHE_DIR = "/.cache";
+	private final String CAMERA_DIR = "/camera";
 
-	public static final String[] DEFAULT_BK_NAME = new String[] {
-			"default_33", "default_44", "default_55" };
+	private final String BACKGROUND_FILE_NAME = "background";
 
-	private static String initAppPath() {
+	public static final String[] DEFAULT_BK_NAME = new String[] { "default_33",
+			"default_44", "default_55" };
+
+	private static StorageUtil mInstance;
+
+	public static StorageUtil getInstance() {
+		if (mInstance == null) {
+			mInstance = new StorageUtil();
+		}
+		return mInstance;
+	}
+
+	private ArrayList<String> mAppDirArray;
+	public final static int DIR_APP_ROOT = 0;
+	public final static int DIR_SCREENSHOT = 1;
+	public final static int DIR_CACHE = 2;
+	public final static int DIR_CAMERA = 3;
+
+	private StorageUtil() {
+		initAppPath();
+		mInstance = this;
+	}
+
+	private boolean initAppPath() {
 		// ÅÐ¶ÏSDCardÊÇ·ñ´æÔÚ
-		boolean sdcardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED);
-		if (!sdcardExist) {
-			LogUtil.e("Request SD card.");
-			return null;
+		if (!Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED)) {
+			LogUtil.e("SD card does not mounted.");
+			return false;
 		}
-		String path = Environment.getExternalStorageDirectory() + APP_ROOT;
-		File file = new File(path);
-		if (!file.exists()) {
-			file.mkdirs();
+
+		mAppDirArray = new ArrayList<String>();
+		mAppDirArray.add(Environment.getExternalStorageDirectory() + APP_ROOT);
+		mAppDirArray.add(mAppDirArray.get(0) + SCREEN_SHOT_PATH);
+		mAppDirArray.add(mAppDirArray.get(0) + CACHE_DIR);
+		mAppDirArray.add(mAppDirArray.get(0) + CAMERA_DIR);
+
+		File file;
+		for (int i = 0; i < mAppDirArray.size(); i++) {
+			file = new File(mAppDirArray.get(i));
+			if (!file.exists()) {
+				file.mkdirs();
+			}
 		}
-		file = new File(path + SCREEN_SHOT_PATH);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		file = new File(path + TMP);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		return path;
+		return true;
 	}
 
-	private static String initTmpPath() {
-		String path = initAppPath();
-		if (path == null) {
-			return null;
+	public String getAppRootByType(int dirType) {
+		if ((mAppDirArray != null) && (dirType < mAppDirArray.size())) {
+			return mAppDirArray.get(dirType);
 		}
-		path = path + TMP;
-		File file = new File(path);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		return path;
-	}
-
-	private static String initScreenShotPath() {
-		String path = initAppPath();
-		if (path == null) {
-			return null;
-		}
-		path = path + SCREEN_SHOT_PATH;
-		File file = new File(path);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		return path;
-	}
-
-	private static String initPath(final String path){
-		String appRoot = initAppPath();
-		if (appRoot == null) {
-			return null;
-		}
-		String newPath = null;
-		if (!path.startsWith("/")) {
-			newPath = appRoot + "/"+path;
-		} else {
-			newPath = appRoot+path;
-		}
-
-		File file = new File(newPath);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-
-		return newPath;
+		return null;
 	}
 
 	/**
@@ -95,32 +78,13 @@ public class StorageUtil {
 	 *            , xx.png
 	 * @return
 	 */
-	public static String saveToTmpPath(Activity activity, Bitmap bmp,
-			String fileName) {
-
-		if (bmp == null || bmp.isRecycled()) {
-			LogUtil.e("Warning: Bitmap is recycled!");
-			return null;
-		}
-		return saveBmpToSDcard(initTmpPath(), bmp, fileName);
-	}
-
-	/**
-	 * 
-	 * @param activity
-	 * @param bmp
-	 * @param fileName
-	 *            , xx.png
-	 * @return
-	 */
-	public static String saveTmpToScreenShot(Activity activity, Bitmap bmp,
+	public String saveTmpToScreenShot(Activity activity, Bitmap bmp,
 			String fileName) {
 		if (bmp == null || bmp.isRecycled()) {
 			return null;
 		}
 		// Í¼Æ¬´æ´¢Â·¾¶
-		String savePath = initScreenShotPath();
-		return saveBmpToSDcard(savePath, bmp, fileName);
+		return saveBmpToSDcard(mAppDirArray.get(DIR_SCREENSHOT), bmp, fileName);
 	}
 
 	/**
@@ -131,8 +95,7 @@ public class StorageUtil {
 	 *            , file.png
 	 * @return
 	 */
-	private static String saveBmpToSDcard(String savePath, Bitmap bmp,
-			String fileName) {
+	private String saveBmpToSDcard(String savePath, Bitmap bmp, String fileName) {
 		LogUtil.e("save image file. [path: " + savePath + ", fileName: "
 				+ fileName);
 		// ±£´æBitmap
@@ -168,39 +131,37 @@ public class StorageUtil {
 	 * @return
 	 */
 	public static String getSDCardPath() {
-		File sdcardDir = null;
 		// ÅÐ¶ÏSDCardÊÇ·ñ´æÔÚ
-		boolean sdcardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED);
-		if (sdcardExist) {
-			sdcardDir = Environment.getExternalStorageDirectory();
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			return Environment.getExternalStorageDirectory().toString();
 		}
-		return sdcardDir.toString();
+		return null;
 	}
 
-	public static String saveCacheFile(Bitmap bmpFile, String fileName){
+	public String saveCacheFile(Bitmap bmpFile, String fileName) {
 		if (bmpFile == null || bmpFile.isRecycled()) {
 			return null;
 		}
 		// Í¼Æ¬´æ´¢Â·¾¶
-		String savePath = initPath(CACHE_DIR);
-		return saveBmpToSDcard(savePath, bmpFile, fileName);
+		return saveBmpToSDcard(mAppDirArray.get(DIR_CACHE), bmpFile, fileName);
 	}
 
-	public static boolean isCacheFileExist(String fileName){
-		File file = new File(initPath(CACHE_DIR)+"/"+fileName);
+	public boolean isCacheFileExist(String fileName) {
+		File file = new File(mAppDirArray.get(DIR_CACHE) + "/" + fileName);
 		return file.exists();
 	}
 
-	public static String getCacheFilePath(final int size){
-		String path = initPath(CACHE_DIR)+"/"+DEFAULT_BK_NAME[size%3]+".png";
+	public String getCacheFilePath(final int puzzleSize) {
+		String path = mAppDirArray.get(DIR_CACHE) + "/"
+				+ DEFAULT_BK_NAME[puzzleSize % 3] + ".png";
 		if ((new File(path)).exists()) {
 			return path;
 		}
 		return null;
 	}
 
-	public static String saveBackground(Bitmap backgroundBmp) {
-		return saveToTmpPath(null, backgroundBmp, BACKGROUND_FILE_NAME);
+	public String saveBackground(Bitmap backgroundBmp) {
+		return saveCacheFile(backgroundBmp, BACKGROUND_FILE_NAME);
 	}
 }

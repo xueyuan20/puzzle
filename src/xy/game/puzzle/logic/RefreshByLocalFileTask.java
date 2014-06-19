@@ -59,8 +59,8 @@ public class RefreshByLocalFileTask extends AsyncTask<String, String, String> {
 			PuzzleProvider provider = PuzzleProvider
 					.getInstance(mPreviewSurfaceview.getContext());
 
-			String path = StorageUtil.saveBackground(mPreviewSurfaceview
-					.getBackgroundBmp());
+			String path = StorageUtil.getInstance().saveBackground(
+					mPreviewSurfaceview.getBackgroundBmp());
 			if ((path != null) && (!TextUtils.isEmpty(path))) {
 				provider.setUseDefaultBk(false);
 				provider.setCustomBkPath(path);

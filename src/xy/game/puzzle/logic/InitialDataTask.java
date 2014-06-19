@@ -27,9 +27,10 @@ public class InitialDataTask extends AsyncTask<String, String, String> {
 	protected String doInBackground(String... arg0) {
 		// TODO Auto-generated method stub
 		Resources res = mContext.getResources();
+		StorageUtil storageUtil = StorageUtil.getInstance();
 		for (int i = 0; i < StorageUtil.DEFAULT_BK_NAME.length; i++) {
-			if (!StorageUtil.isCacheFileExist(StorageUtil.DEFAULT_BK_NAME[i])) {
-				StorageUtil.saveCacheFile(
+			if (!storageUtil.isCacheFileExist(StorageUtil.DEFAULT_BK_NAME[i])) {
+				storageUtil.saveCacheFile(
 						BitmapFactory.decodeResource(res, mDefaultBmpId[i]),
 						StorageUtil.DEFAULT_BK_NAME[i]);
 			}

@@ -41,8 +41,11 @@ public class ScreenUtil {
 
 		Bitmap newBitmap = combineBitmap(bmp, frontBmp);
 		decorview.destroyDrawingCache();
-		String path = StorageUtil.saveTmpToScreenShot(activity, newBitmap, "/ScreenShot_"
-				+ String.valueOf(System.currentTimeMillis() / 1000));
+		String path = StorageUtil.getInstance().saveTmpToScreenShot(
+				activity,
+				newBitmap,
+				"/ScreenShot_"
+						+ String.valueOf(System.currentTimeMillis() / 1000));
 
 		// free
 		if (!bmp.isRecycled()) {
@@ -245,10 +248,10 @@ public class ScreenUtil {
 			}
 
 			// // 重新设置该属性为false，加载图片返回
-			 outOptions.inJustDecodeBounds = false;
-			 outOptions.inPurgeable = true;
-			 outOptions.inInputShareable = true;
-			 temBitmap = BitmapFactory.decodeResource(res, resId, outOptions);
+			outOptions.inJustDecodeBounds = false;
+			outOptions.inPurgeable = true;
+			outOptions.inInputShareable = true;
+			temBitmap = BitmapFactory.decodeResource(res, resId, outOptions);
 
 			LogUtil.e("bitmap width = " + temBitmap.getWidth() + "; height = "
 					+ temBitmap.getHeight());

@@ -218,8 +218,8 @@ public class PreviewActivity extends Activity implements OnClickListener {
 								.getInstance(PreviewActivity.this);
 
 						// String path = StorageUtil.saveBackground(bitmap);
-						String path = StorageUtil.saveBackground(mSvPreview
-								.getBackgroundBmp());
+						String path = StorageUtil.getInstance().saveBackground(
+								mSvPreview.getBackgroundBmp());
 						LogUtil.e("from gallery [file path] " + path);
 
 						if ((path != null) && (!TextUtils.isEmpty(path))) {

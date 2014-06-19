@@ -283,7 +283,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		switch (requestCode) {
-		case MessageUtils.CODE_PREVIEW_IMG:
+		case 0:
 
 			break;
 

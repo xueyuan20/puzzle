@@ -606,8 +606,6 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 							mUnitRectArray[i - 1].left() - mPuzzleRect.left,
 							mUnitRectArray[i - 1].top() - mPuzzleRect.top,
 							mGridSize, mGridSize);
-					// StorageUtil.saveToTmpPath((Activity) mContext,
-					// mBmpPaint[i], "background_" + String.valueOf(i));
 				}
 			}
 		}
