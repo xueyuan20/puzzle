@@ -20,11 +20,6 @@ import android.widget.TextView;
  * 
  */
 public final class FloatMenuItem extends RelativeLayout {
-	private final String TEXTVIEW_ID = "user_text_id";
-	private final String IMAGEVIEW_ID = "user_img_id";
-	private final String TEXT = "user_text";
-	private final String SRC = "user_src";
-	private final String BACKGROUND = "user_background";
 
 	protected int mBackgroundId = -1;
 	protected int mImageId = -1; // ImageView¿Ø¼þID
@@ -48,20 +43,24 @@ public final class FloatMenuItem extends RelativeLayout {
 		/**
 		 * Get attributes from xml file.
 		 */
-		mImageSrcId = attrs.getAttributeResourceValue(null, SRC, 0);
+		mImageSrcId = attrs
+				.getAttributeResourceValue(null, CustomViewID.SRC, 0);
 		if (mImageSrcId > 0) {
 			mImageView = new ImageView(mContext);
-			mImageId = attrs.getAttributeResourceValue(null, IMAGEVIEW_ID, 0);
+			mImageId = attrs.getAttributeResourceValue(null,
+					CustomViewID.IMAGEVIEW_ID, 0);
 			initImageView(mImageView);
 
 			mImageView.setImageResource(mImageSrcId);
 
 		}
 
-		mTextId = attrs.getAttributeResourceValue(null, TEXTVIEW_ID, 0);
+		mTextId = attrs.getAttributeResourceValue(null,
+				CustomViewID.TEXTVIEW_ID, 0);
 		initTextView(mTextView);
 
-		int tvResId = attrs.getAttributeResourceValue(null, TEXT, 0);
+		int tvResId = attrs.getAttributeResourceValue(null, CustomViewID.TEXT,
+				0);
 		if (tvResId > 0) {
 			mText = mRes.getString(tvResId);
 			if (mText == null || mText.isEmpty()) {
@@ -71,7 +70,8 @@ public final class FloatMenuItem extends RelativeLayout {
 			}
 		}
 
-		mBackgroundId = attrs.getAttributeResourceValue(null, BACKGROUND, 0);
+		mBackgroundId = attrs.getAttributeResourceValue(null,
+				CustomViewID.BACKGROUND, 0);
 		if (mBackgroundId > 0) {
 			this.setBackgroundResource(mBackgroundId);
 		}
@@ -164,7 +164,7 @@ public final class FloatMenuItem extends RelativeLayout {
 		}
 	}
 
-	public int getId(){
+	public int getId() {
 		return mImageSrcId;
 	}
 }

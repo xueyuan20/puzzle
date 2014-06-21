@@ -1,5 +1,7 @@
 package xy.game.puzzle.activity;
 
+import com.umeng.analytics.MobclickAgent;
+
 import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.logic.ScreenShotAsyncTask;
@@ -8,7 +10,6 @@ import xy.game.puzzle.util.MessageUtils;
 import xy.game.puzzle.util.ScreenUtil;
 import xy.game.puzzle.view.PuzzleSurfaceView;
 import xy.game.puzzle.view.PuzzleSurfaceView.DIFFICULTY_LEVEL;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,7 +26,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements OnClickListener {
+public final class MainActivity extends BaseActivity implements OnClickListener {
 	private ImageView mTvMore, mTvHint;
 	private TextView mTvSteps, mTvTimer;
 	private TextView mTvOperatorHint;
@@ -131,6 +132,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
@@ -139,6 +141,28 @@ public class MainActivity extends Activity implements OnClickListener {
 		mProvider = PuzzleProvider.getInstance(this);
 
 		initViews();
+
+		/**
+		 * upload statistic data.
+		 */
+		MobclickAgent.updateOnlineConfig(mContext);
+		MobclickAgent.setDebugMode(true);
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MobclickAgent.onPageStart("MainPage");
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPageEnd("MainPage");
+		MobclickAgent.onPause(this);
 	}
 
 	private void initViews() {
@@ -229,7 +253,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.tv_game_more:
-			startActivity(new Intent(MainActivity.this, AboutActivity.class));
+			startActivity(new Intent(MainActivity.this, SettingsActivity.class));
 			break;
 
 		case R.id.tv_game_hint:

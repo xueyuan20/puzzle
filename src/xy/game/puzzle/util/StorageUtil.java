@@ -164,4 +164,13 @@ public class StorageUtil {
 	public String saveBackground(Bitmap backgroundBmp) {
 		return saveCacheFile(backgroundBmp, BACKGROUND_FILE_NAME);
 	}
+
+	public boolean clearCache(){
+		String path = mAppDirArray.get(DIR_CACHE);
+		File file = new File(path);
+		if (file.exists()) {
+			return file.delete();
+		}
+		return true;
+	}
 }

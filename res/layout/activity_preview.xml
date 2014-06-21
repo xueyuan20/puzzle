@@ -30,7 +30,7 @@
         android:background="@color/half_dark"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/left_border_width"
-        android:text="@string/preview"
+        android:text="@string/title_preview"
         android:textColor="@color/title_text_color"
         android:textSize="@dimen/title_text_size" />
 
@@ -49,40 +49,40 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            user_img_id="@+id/img_item01"
-            user_src="@drawable/selector_back"
-            user_text="@string/menu_title_back"
-            user_text_id="@+id/text_item01" />
+            custom_img_id="@+id/img_item01"
+            custom_src="@drawable/selector_back"
+            custom_text="@string/menu_title_back"
+            custom_text_id="@+id/text_item01" />
 
         <xy.game.puzzle.view.FloatMenuItem
             android:id="@+id/floatMenuItem02"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            user_img_id="@+id/img_item02"
-            user_src="@drawable/ic_menu_camera"
-            user_text="@string/menu_title_camera"
-            user_text_id="@+id/text_item02" />
+            custom_img_id="@+id/img_item02"
+            custom_src="@drawable/ic_menu_camera"
+            custom_text="@string/menu_title_camera"
+            custom_text_id="@+id/text_item02" />
 
         <xy.game.puzzle.view.FloatMenuItem
             android:id="@+id/floatMenuItem03"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            user_img_id="@+id/img_item03"
-            user_src="@drawable/ic_menu_gallery"
-            user_text="@string/menu_title_gallery"
-            user_text_id="@+id/text_item03" />
+            custom_img_id="@+id/img_item03"
+            custom_src="@drawable/ic_menu_gallery"
+            custom_text="@string/menu_title_gallery"
+            custom_text_id="@+id/text_item03" />
 
         <xy.game.puzzle.view.FloatMenuItem
             android:id="@+id/floatMenuItem04"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            user_img_id="@+id/img_item04"
-            user_src="@drawable/ic_menu_default"
-            user_text="@string/menu_title_default"
-            user_text_id="@+id/text_item04" />
+            custom_img_id="@+id/img_item04"
+            custom_src="@drawable/ic_menu_default"
+            custom_text="@string/menu_title_default"
+            custom_text_id="@+id/text_item04" />
     </LinearLayout>
 
 </RelativeLayout>

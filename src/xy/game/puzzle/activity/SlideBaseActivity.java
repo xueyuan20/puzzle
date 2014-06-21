@@ -3,11 +3,10 @@ package xy.game.puzzle.activity;
 import xy.game.puzzle.logic.CustomGesture;
 import xy.game.puzzle.logic.CustomGestureListener;
 import xy.game.puzzle.util.LogUtil;
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
-public class SlideBaseActivity extends Activity implements
+public class SlideBaseActivity extends BaseActivity implements
 		CustomGestureListener {
 	private CustomGesture mGesture;
 

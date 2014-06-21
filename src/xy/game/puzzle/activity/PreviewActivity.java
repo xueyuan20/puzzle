@@ -11,7 +11,6 @@ import xy.game.puzzle.util.ScreenUtil;
 import xy.game.puzzle.util.StorageUtil;
 import xy.game.puzzle.view.FloatMenuItem;
 import xy.game.puzzle.view.PreviewSurfaceView;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -29,7 +28,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class PreviewActivity extends Activity implements OnClickListener {
+import com.umeng.analytics.MobclickAgent;
+
+public final class PreviewActivity extends BaseActivity implements
+		OnClickListener {
 	private boolean mPreviewModeFlag = false;
 	private FloatMenuItem[] mMenuArray;
 	// private ImageView mIvPreview;
@@ -76,7 +78,7 @@ public class PreviewActivity extends Activity implements OnClickListener {
 
 		mSvPreview.setPreviewMode(mPreviewModeFlag);
 		if (mPreviewModeFlag) {
-			mTvPageTitle.setText(mRes.getString(R.string.preview));
+			mTvPageTitle.setText(mRes.getString(R.string.title_preview));
 			mMenuArray[1].setTextAndSrc(R.string.menu_title_share);
 			mMenuArray[2].setTextAndSrc(R.string.menu_title_delete);
 			mMenuArray[3].setTextAndSrc(R.string.menu_title_detail);
@@ -93,15 +95,25 @@ public class PreviewActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	private void setDefaultPreview() {
-		mSvPreview.setImageAsBackground(true, null);
-		PuzzleProvider.getInstance(this).setUseDefaultBk(true);
-	}
-
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		MobclickAgent.onPageStart("PreviewPage");
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPageEnd("PreviewPage");
+		MobclickAgent.onPause(this);
+	}
+
+	private void setDefaultPreview() {
+		mSvPreview.setImageAsBackground(true, null);
+		PuzzleProvider.getInstance(this).setUseDefaultBk(true);
 	}
 
 	@Override

@@ -4,68 +4,69 @@
     <string name="app_name">"滑块拼图"</string>
     <string name="action_settings">"设置"</string>
     <string name="hello_world">"欢迎使用!"</string>
-
     <string name="title_steps">"步数 : %1$d "</string>
     <string name="title_timer">"耗时"</string>
     <string name="title_score">"总分 : "</string>
     <string name="result_title">"任务完成"</string>
     <string name="result_content">"得分：%1$d\r\n耗时：%2$s\r\n步数：%3$d"</string>
     <string name="share_content">"我正在玩\"%1$s\",快来试试吧～\r\n%2$s"</string>
-
     <string name="title_game_level">"请选择游戏等级"</string>
-    <string-array name="game_level_choices">
-        <item >"初级"</item>
-        <item >"中级"</item>
-        <item >"高级"</item>
-    </string-array>
 
+    <string-array name="game_level_choices">
+        <item>"初级"</item>
+        <item>"中级"</item>
+        <item>"高级"</item>
+    </string-array>
     <string-array name="game_level_values">
-        <item >"初级"</item>
-        <item >"中级"</item>
-        <item >"高级"</item>
+        <item>"初级"</item>
+        <item>"中级"</item>
+        <item>"高级"</item>
     </string-array>
 
     <string name="title_set_picture">"设置原图"</string>
 
     <string-array name="picture_res_choices">
-        <item >"拍照"</item>
-        <item >"相册"</item>
+        <item>"拍照"</item>
+        <item>"相册"</item>
     </string-array>
-
     <string-array name="picture_res_values">
-        <item >"拍照"</item>
-        <item >"相册"</item>
+        <item>"拍照"</item>
+        <item>"相册"</item>
     </string-array>
 
     <string name="menu_title_set_bk">"背景"</string>
     <string name="menu_title_set_level">"等级"</string>
     <string name="menu_title_restart">"重置"</string>
     <string name="menu_title_screenshot">"截屏"</string>
-    <string name="menu_title_settings">"设置"</string>
-
+    <string name="title_settings">"设置"</string>
     <string name="menu_title_back">"返回"</string>
     <string name="menu_title_share">"分享"</string>
     <string name="menu_title_delete">"删除"</string>
     <string name="menu_title_detail">"详情"</string>
-    
     <string name="menu_title_camera">"拍照"</string>
     <string name="menu_title_gallery">"相册"</string>
     <string name="menu_title_default">"默认"</string>
-
     <string name="ok">"确定"</string>
     <string name="cancle">"取消"</string>
-
-    <string name="preview">"预览"</string>
-    <string name="set_image">"设置拼图"</string>
-    <string name="appdescription">"应用说明"</string>
-
-    <string name="udpate">"检查更新"</string>
+    <string name="title_preview">"预览"</string>
+    <string name="set_image">"设置拼图背景"</string>
+    <string name="appdescription">"应用描述"</string>
+    <string name="update">"检查更新"</string>
     <string name="about">"关于"</string>
     <string name="feedback">"用户反馈"</string>
-
     <string name="no_preview">"无预览"</string>
     <string name="exit_hint">"再按一次退出程序"</string>
-
-    <string name="menu_title_hint">"提示"</string>
+    <string name="menu_title_hint">"数字提示"</string>
     <string name="menu_title_more">"更多"</string>
+    <string name="title_clear_cache">"清除缓存"</string>
+    <string name="title_settings_game">"游戏设置"</string>
+    <string name="title_settings_others">"辅助设置"</string>
+    <string name="title_game_top_score">"最高记录"</string>
+    <string name="title_settings_gamelevel">"游戏等级"</string>
+    <string name="umeng_image_desc">"umeng"</string>
+
+    <string name="update_checking">"更新检查最新版本信息..."</string>
+    <string name="update_no_new">"当前已是最新版本"</string>
+
+    <string name="clear_cache_hint">"清除Cache, 可能导致拼图背景图异常，需要手动重新获取"</string>
 </resources>

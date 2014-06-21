@@ -13,6 +13,7 @@ public class PuzzleApplication extends Application {
 		super.onCreate();
 		Context context = getApplicationContext();
 		PuzzleProvider.getInstance(context);
+
 		InitialDataTask task = new InitialDataTask(context);
 		task.execute();
 	}

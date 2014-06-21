@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#55CCCCCC" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/left_border_width" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/ContentTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:gravity="center"
+                android:text="@string/title_settings_game" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dip"
+                android:background="@drawable/white_erea_style"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_set_level"
+                    style="@style/ContentTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:text="@string/title_settings_gamelevel" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/light_brown" />
+
+                <TextView
+                    android:id="@+id/tv_top_score"
+                    style="@style/ContentTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:text="@string/title_game_top_score" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/light_brown" />
+
+                <TextView
+                    android:id="@+id/tv_set_numhint"
+                    style="@style/ContentTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:text="@string/menu_title_hint" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/light_brown" />
+
+                <TextView
+                    android:id="@+id/tv_clearcache"
+                    style="@style/ContentTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:text="@string/title_clear_cache" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/ContentTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:gravity="center"
+                android:text="@string/title_settings_others" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dip"
+                android:background="@drawable/white_erea_style"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_update"
+                    style="@style/ContentTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:text="@string/update" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/light_brown" />
+
+                <TextView
+                    android:id="@+id/tv_feedback"
+                    style="@style/ContentTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:text="@string/feedback" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/light_brown" />
+
+                <TextView
+                    android:id="@+id/tv_app_desc"
+                    style="@style/ContentTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:text="@string/about" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <xy.game.puzzle.view.CustomToast
+        android:id="@+id/customToast"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        custom_text="@string/update_checking" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="@dimen/left_border_width"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true" />
+
+</RelativeLayout>

@@ -7,7 +7,9 @@ import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
 
-public class UserAgreementActivity extends SlideBaseActivity {
+import com.umeng.analytics.MobclickAgent;
+
+public final class UserAgreementActivity extends SlideBaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,5 +27,21 @@ public class UserAgreementActivity extends SlideBaseActivity {
 				finish();
 			}
 		});
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MobclickAgent.onPageStart("AboutPage");
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPageEnd("AboutPage");
+		MobclickAgent.onPause(this);
 	}
 }
