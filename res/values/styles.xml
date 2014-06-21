@@ -18,6 +18,10 @@
         
     </style>
 
+    <style name="NoTitleAppTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <!-- Fullscreen Page Theme -->
     <style name="FullscreenPage" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>

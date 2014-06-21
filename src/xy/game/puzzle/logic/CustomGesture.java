@@ -12,8 +12,8 @@ import android.view.MotionEvent;
 public class CustomGesture {
 	private CustomGestureListener mListener;
 	private Position mStartPos;
-	private final long PRERESSED_TIME_THRESHOLD = 1500;// in: ms
-	private final float SLIDE_DISTANCE_MIN = 10;
+	private final long PRERESSED_TIME_THRESHOLD = 3000;// in: ms
+	private final float SLIDE_DISTANCE_MIN = 5;
 
 	public CustomGesture(CustomGestureListener listener) {
 		mListener = listener;

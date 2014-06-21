@@ -8,7 +8,6 @@ import xy.game.puzzle.util.MessageUtils;
 import xy.game.puzzle.util.ScreenUtil;
 import xy.game.puzzle.view.PuzzleSurfaceView;
 import xy.game.puzzle.view.PuzzleSurfaceView.DIFFICULTY_LEVEL;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,7 +24,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements OnClickListener {
+public final class MainActivity extends BaseActivity implements OnClickListener {
 	private ImageView mTvMore, mTvHint;
 	private TextView mTvSteps, mTvTimer;
 	private TextView mTvOperatorHint;
@@ -229,7 +228,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.tv_game_more:
-			startActivity(new Intent(MainActivity.this, AboutActivity.class));
+			startActivity(new Intent(MainActivity.this, SettingsActivity.class));
 			break;
 
 		case R.id.tv_game_hint:

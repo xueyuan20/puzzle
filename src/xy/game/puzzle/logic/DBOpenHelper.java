@@ -56,6 +56,9 @@ class DBOpenHelper extends SQLiteOpenHelper {
 	}
 
 	public void savePuzzle(int[] array) {
+		if (array == null) {
+			return;
+		}
 		resetPuzzleTable();
 		SQLiteDatabase db = getWritableDatabase();
 		for (int j = 0; j < array.length; j++) {

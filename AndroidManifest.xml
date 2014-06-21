@@ -35,15 +35,17 @@
         <!-- Subpage: Preview -->
         <activity android:name="xy.game.puzzle.activity.PreviewActivity"
             android:theme="@style/FullscreenPage"
-            android:label="@string/preview"
+            android:label="@string/title_preview"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation"
             android:multiprocess="true" />
         <!-- Subpage: About -->
-        <activity android:name="xy.game.puzzle.activity.AboutActivity"
-            android:theme="@style/AppTheme"
+        <activity
+            android:name="xy.game.puzzle.activity.SettingsActivity"
             android:icon="@drawable/selector_back"
-            android:label="@string/about" />
+            android:label="@string/title_settings"
+            android:theme="@style/AppTheme" />
+
         <!-- Subpage: User Agreement -->
         <activity android:name="xy.game.puzzle.activity.UserAgreementActivity"
             android:theme="@style/AppTheme"
