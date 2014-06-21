@@ -7,7 +7,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/left_border_width" >
+        android:paddingLeft="@dimen/left_border_width"
+        android:paddingRight="@dimen/left_border_width" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,12 +111,15 @@
                     android:layout_height="1dip"
                     android:background="@color/light_brown" />
 
-                <TextView
+                <xy.game.puzzle.view.CustomIconTextView
                     android:id="@+id/tv_app_desc"
                     style="@style/ContentTextStyle"
+                    android:background="@drawable/selector_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
-                    android:text="@string/about" />
+                    custom_dir_img_src="@drawable/ic_launcher"
+                    custom_src="@drawable/ic_launcher"
+                    custom_text="@string/about" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -124,8 +128,8 @@
         android:id="@+id/customToast"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        custom_text="@string/update_checking" />
+        custom_text="@string/update_checking"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textView1"

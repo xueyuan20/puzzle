@@ -4,6 +4,7 @@ import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.StorageUtil;
+import xy.game.puzzle.view.CustomIconTextView;
 import xy.game.puzzle.view.CustomToast;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,7 +20,9 @@ public final class SettingsActivity extends SlideBaseActivity implements
 		OnClickListener {
 	private Context mContext;
 	private TextView mTvGameLevel, mTvScoreTops, mTvShowNoHint, mTvClearCache;
-	private TextView mTvUpdate, mTvFeedback, mTvAppdesc;
+	private TextView mTvUpdate, mTvFeedback;
+
+	private CustomIconTextView mTvAppdesc;
 	private CustomToast mCustomToast;
 	private Resources mRes;
 	private PuzzleProvider mProvider;
@@ -43,7 +46,7 @@ public final class SettingsActivity extends SlideBaseActivity implements
 
 		mTvFeedback = (TextView) findViewById(R.id.tv_feedback);
 		mTvFeedback.setOnClickListener(this);
-		mTvAppdesc = (TextView) findViewById(R.id.tv_app_desc);
+		mTvAppdesc = (CustomIconTextView) findViewById(R.id.tv_app_desc);
 		mTvAppdesc.setOnClickListener(this);
 
 		mTvUpdate = (TextView) findViewById(R.id.tv_update);
