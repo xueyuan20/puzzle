@@ -7,7 +7,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/left_border_width" >
+        android:paddingLeft="@dimen/left_border_width"
+        android:paddingRight="@dimen/left_border_width" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,48 +29,52 @@
                 android:background="@drawable/white_erea_style"
                 android:orientation="vertical" >
 
-                <TextView
+                <xy.game.puzzle.view.CustomIconView
                     android:id="@+id/tv_set_level"
                     style="@style/ContentTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
-                    android:text="@string/title_settings_gamelevel" />
+                    custom_desc_text="@string/game_level_values_simple"
+                    custom_text="@string/title_settings_gamelevel" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dip"
                     android:background="@color/light_brown" />
 
-                <TextView
+                <xy.game.puzzle.view.CustomIconView
                     android:id="@+id/tv_top_score"
                     style="@style/ContentTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
-                    android:text="@string/title_game_top_score" />
+                    custom_desc_img="@drawable/ic_app_arrow"
+                    custom_text="@string/title_game_top_score" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dip"
                     android:background="@color/light_brown" />
 
-                <TextView
+                <xy.game.puzzle.view.CustomIconView
                     android:id="@+id/tv_set_numhint"
                     style="@style/ContentTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
-                    android:text="@string/menu_title_hint" />
+                    custom_desc_img="?android:drawable/checkbox_on_background"
+                    custom_text="@string/menu_title_hint" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dip"
                     android:background="@color/light_brown" />
 
-                <TextView
+                <xy.game.puzzle.view.CustomIconView
                     android:id="@+id/tv_clearcache"
                     style="@style/ContentTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
-                    android:text="@string/title_clear_cache" />
+                    custom_desc_img="@drawable/ic_app_arrow"
+                    custom_text="@string/title_clear_cache" />
             </LinearLayout>
 
             <TextView
@@ -86,36 +91,40 @@
                 android:background="@drawable/white_erea_style"
                 android:orientation="vertical" >
 
-                <TextView
+                <xy.game.puzzle.view.CustomIconView
                     android:id="@+id/tv_update"
                     style="@style/ContentTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
-                    android:text="@string/update" />
+                    custom_desc_text="@string/about"
+                    custom_text="@string/app_version" >
+                </xy.game.puzzle.view.CustomIconView>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dip"
                     android:background="@color/light_brown" />
 
-                <TextView
+                <xy.game.puzzle.view.CustomIconView
                     android:id="@+id/tv_feedback"
                     style="@style/ContentTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
-                    android:text="@string/feedback" />
+                    custom_desc_img="@drawable/ic_app_arrow"
+                    custom_text="@string/feedback" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dip"
                     android:background="@color/light_brown" />
 
-                <TextView
+                <xy.game.puzzle.view.CustomIconView
                     android:id="@+id/tv_app_desc"
                     style="@style/ContentTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
-                    android:text="@string/about" />
+                    custom_desc_img="@drawable/ic_app_arrow"
+                    custom_text="@string/about" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -124,11 +133,10 @@
         android:id="@+id/customToast"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        custom_text="@string/update_checking" />
+        custom_text="@string/update_checking"
+        android:visibility="gone" />
 
     <TextView
-        android:id="@+id/textView1"
         android:layout_width="@dimen/left_border_width"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true" />

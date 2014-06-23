@@ -146,14 +146,12 @@ public final class MainActivity extends BaseActivity implements OnClickListener 
 		 * upload statistic data.
 		 */
 		MobclickAgent.updateOnlineConfig(mContext);
-		MobclickAgent.setDebugMode(true);
 	}
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		MobclickAgent.onPageStart("MainPage");
 		MobclickAgent.onResume(this);
 	}
 
@@ -161,7 +159,6 @@ public final class MainActivity extends BaseActivity implements OnClickListener 
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		MobclickAgent.onPageEnd("MainPage");
 		MobclickAgent.onPause(this);
 	}
 
@@ -301,20 +298,6 @@ public final class MainActivity extends BaseActivity implements OnClickListener 
 
 	public void stopTimer() {
 		mEnableTimer = false;
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		switch (requestCode) {
-		case 0:
-
-			break;
-
-		default:
-			break;
-		}
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 }

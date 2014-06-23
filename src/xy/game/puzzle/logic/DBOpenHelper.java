@@ -14,12 +14,16 @@ class DBOpenHelper extends SQLiteOpenHelper {
 
 	private final String PUZZLE_TABLE = "puzzle";
 	private final String SCORE_TABLE = "score";
+	private final String TOPS_TABLE = "tops";
 
 	private final String[] PUZZLE_COLUMNS = { "_ID", "indexPos", "indexValue",
 			"flag", };
 
 	private final String[] SCORE_COLUMNS = { "_ID", "userName", "score",
 			"stepsCount", "timerCount", "completeFlag", "completeTime", };
+
+	private final String[] TOPS_COLUMNS = { "_ID", "userName", "Level",
+			"stepsCount", "timerCount", };
 
 	public DBOpenHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,6 +47,13 @@ class DBOpenHelper extends SQLiteOpenHelper {
 				+ SCORE_COLUMNS[4] + " INTEGER NOT NULL DEFAULT 0,"
 				+ SCORE_COLUMNS[5] + " INTEGER NOT NULL DEFAULT 0,"
 				+ SCORE_COLUMNS[6] + " TEXT" + ");";
+		db.execSQL(sql);
+
+		sql = "CREATE TABLE " + TOPS_TABLE + "(" + TOPS_COLUMNS[0]
+				+ " INTEGER PRIMARY KEY AUTOINCREMENT," + TOPS_COLUMNS[1]
+				+ " TEXT, " + TOPS_COLUMNS[2] + " INTEGER NOT NULL DEFAULT 0,"
+				+ TOPS_COLUMNS[3] + " INTEGER NOT NULL DEFAULT 0,"
+				+ TOPS_COLUMNS[4] + " INTEGER NOT NULL DEFAULT 0" + ");";
 		db.execSQL(sql);
 	}
 
@@ -71,7 +82,7 @@ class DBOpenHelper extends SQLiteOpenHelper {
 	}
 
 	public int[] queryPuzzleArray() {
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor = db.query(PUZZLE_TABLE, PUZZLE_COLUMNS,
 				PUZZLE_COLUMNS[3] + "=?", new String[] { String.valueOf(0) },
 				null, null, null);
@@ -129,7 +140,7 @@ class DBOpenHelper extends SQLiteOpenHelper {
 	}
 
 	public RecordItem queryRecord(int puzzleSize) {
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = getReadableDatabase();
 		if (db != null) {
 			String whereClause = SCORE_COLUMNS[5] + "=0";
 			Cursor cursor = db.query(SCORE_TABLE, SCORE_COLUMNS, whereClause,
@@ -156,7 +167,7 @@ class DBOpenHelper extends SQLiteOpenHelper {
 		return null;
 	}
 
-	public void delete(RecordItem scoreRecord) {
+	public void deleteRecord(RecordItem scoreRecord) {
 		SQLiteDatabase db = getWritableDatabase();
 		if (db != null) {
 			String whereClause = SCORE_COLUMNS[0] + "=?";
@@ -198,7 +209,59 @@ class DBOpenHelper extends SQLiteOpenHelper {
 		if (db != null) {
 			String whereClause = SCORE_COLUMNS[5] + "=0";
 			db.delete(SCORE_TABLE, whereClause, null);
-	
 		}
 	}
+
+	/**
+	 * insert a top record to toplist.
+	 * 
+	 * @param record
+	 */
+	public void insertTopRecord(RecordItem record) {
+		SQLiteDatabase db = getWritableDatabase();
+		if (db != null) {
+			ContentValues values = new ContentValues();
+			String userName = record.getUserName();
+			values.put(TOPS_COLUMNS[1], userName);
+			values.put(TOPS_COLUMNS[2], record.getLevel());
+			values.put(TOPS_COLUMNS[3], record.getStepCount());
+			values.put(TOPS_COLUMNS[4], record.getTimerCount());
+			Cursor cursor = queryTops(userName);
+			if ((cursor != null)) {
+				while (cursor.moveToNext()) {
+					String whereClause = TOPS_COLUMNS[1] + "=" + userName;
+					db.update(TOPS_TABLE, values, whereClause, null);
+				}
+				cursor = null;
+			} else {
+				db.insertOrThrow(TOPS_TABLE, TOPS_COLUMNS[1], values);
+			}
+		}
+	}
+
+	/**
+	 * query top record by username.
+	 * 
+	 * @param userName
+	 * @return
+	 */
+	public Cursor queryTops(String userName) {
+		SQLiteDatabase db = getReadableDatabase();
+		String whereClause = TOPS_COLUMNS[1] + "=" + userName;
+		return db.query(TOPS_TABLE, TOPS_COLUMNS, whereClause, null, null,
+				null, null);
+	}
+
+	/**
+	 * query all top record.
+	 * 
+	 * @return
+	 */
+	public Cursor queryTops(int level) {
+		SQLiteDatabase db = getReadableDatabase();
+		String whereClause = TOPS_COLUMNS[2] + "=?";
+		return db.query(TOPS_TABLE, TOPS_COLUMNS, whereClause,
+				new String[] { String.valueOf(level) }, null, null, null);
+	}
+
 }

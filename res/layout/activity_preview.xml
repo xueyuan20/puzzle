@@ -20,9 +20,7 @@
         android:layout_centerInParent="true"
         android:contentDescription="@string/preview"
         android:src="@drawable/background_33" />
-    -->
-
-    <TextView
+           <TextView
         android:id="@+id/page_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
@@ -33,6 +31,16 @@
         android:text="@string/title_preview"
         android:textColor="@color/title_text_color"
         android:textSize="@dimen/title_text_size" />
+    -->
+    <xy.game.puzzle.view.CustomTitleBar 
+        android:id="@+id/page_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_alignParentTop="true"
+        custom_background="@color/half_dark"
+        custom_text="@string/title_preview"
+        custom_text_color="@color/title_text_color"
+        custom_text_size="@dimen/title_text_size" />
 
     <LinearLayout
         android:layout_width="match_parent"

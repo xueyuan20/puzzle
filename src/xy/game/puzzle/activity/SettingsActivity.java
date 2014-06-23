@@ -2,8 +2,8 @@ package xy.game.puzzle.activity;
 
 import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
-import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.StorageUtil;
+import xy.game.puzzle.view.CustomIconView;
 import xy.game.puzzle.view.CustomToast;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
@@ -25,8 +24,10 @@ import com.umeng.update.UpdateStatus;
 public final class SettingsActivity extends SlideBaseActivity implements
 		OnClickListener {
 	private Context mContext;
-	private TextView mTvGameLevel, mTvScoreTops, mTvShowNoHint, mTvClearCache;
-	private TextView mTvUpdate, mTvFeedback, mTvAppdesc;
+	private CustomIconView mTvGameLevel, mTvScoreTops, mTvShowNoHint,
+			mTvClearCache;
+	private CustomIconView mTvUpdate, mTvFeedback;
+	private CustomIconView mTvAppdesc;
 	private CustomToast mCustomToast;
 	private Resources mRes;
 	private PuzzleProvider mProvider;
@@ -41,23 +42,27 @@ public final class SettingsActivity extends SlideBaseActivity implements
 		setContentView(R.layout.activity_settings);
 		mContext = this;
 		mProvider = PuzzleProvider.getInstance(mContext);
-		mTvGameLevel = (TextView) findViewById(R.id.tv_set_level);
+		mTvGameLevel = (CustomIconView) findViewById(R.id.tv_set_level);
 		mTvGameLevel.setOnClickListener(this);
-		mTvScoreTops = (TextView) findViewById(R.id.tv_top_score);
+		initGameLevelValue(mProvider.getGameLevel());
+
+		mTvScoreTops = (CustomIconView) findViewById(R.id.tv_top_score);
 		mTvScoreTops.setOnClickListener(this);
-		mTvShowNoHint = (TextView) findViewById(R.id.tv_set_numhint);
+
+		mTvShowNoHint = (CustomIconView) findViewById(R.id.tv_set_numhint);
 		mTvShowNoHint.setOnClickListener(this);
-		mTvClearCache = (TextView) findViewById(R.id.tv_clearcache);
+		initShowNoHint(mProvider.checkWetherUseHint());
+
+		mTvClearCache = (CustomIconView) findViewById(R.id.tv_clearcache);
 		mTvClearCache.setOnClickListener(this);
 
-		mTvFeedback = (TextView) findViewById(R.id.tv_feedback);
+		mTvFeedback = (CustomIconView) findViewById(R.id.tv_feedback);
 		mTvFeedback.setOnClickListener(this);
-		mTvAppdesc = (TextView) findViewById(R.id.tv_app_desc);
+		mTvAppdesc = (CustomIconView) findViewById(R.id.tv_app_desc);
 		mTvAppdesc.setOnClickListener(this);
 
-		mTvUpdate = (TextView) findViewById(R.id.tv_update);
+		mTvUpdate = (CustomIconView) findViewById(R.id.tv_update);
 		mTvUpdate.setOnClickListener(this);
-		mTvUpdate.setText(mRes.getString(R.string.update));
 
 		mCustomToast = (CustomToast) findViewById(R.id.customToast);
 		mCustomToast.setOnClickListener(this);
@@ -78,7 +83,6 @@ public final class SettingsActivity extends SlideBaseActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		MobclickAgent.onPageStart("SettingsPage");
 		MobclickAgent.onResume(this);
 	}
 
@@ -86,7 +90,6 @@ public final class SettingsActivity extends SlideBaseActivity implements
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		MobclickAgent.onPageEnd("SettingsPage");
 		MobclickAgent.onPause(this);
 	}
 
@@ -108,6 +111,7 @@ public final class SettingsActivity extends SlideBaseActivity implements
 										int index) {
 									// TODO Auto-generated method stub
 									mProvider.setGameLevel(index);
+									initGameLevelValue(index);
 									dlg.dismiss();
 								}
 							}).show();
@@ -117,7 +121,7 @@ public final class SettingsActivity extends SlideBaseActivity implements
 			break;
 		case R.id.tv_set_numhint:
 			boolean showHint = !mProvider.checkWetherUseHint();
-			LogUtil.e("Change whether to show hint: " + showHint);
+			initShowNoHint(showHint);
 			mProvider.changeHintType(showHint);
 			break;
 		case R.id.tv_feedback:
@@ -164,29 +168,6 @@ public final class SettingsActivity extends SlideBaseActivity implements
 				}
 			});
 
-//			UmengUpdateAgent.setDialogListener(new UmengDialogButtonListener() {
-//
-//				@Override
-//				public void onClick(int state) {
-//					// TODO Auto-generated method stub
-//					switch (state) {
-//					case UpdateStatus.Update:
-//						break;
-//
-//					case UpdateStatus.Ignore:
-//
-//						break;
-//
-//					case UpdateStatus.NotNow:
-//
-//						break;
-//
-//					default:
-//						break;
-//					}
-//				}
-//			});
-
 			/**
 			 * Listen to the update events.
 			 */
@@ -219,6 +200,41 @@ public final class SettingsActivity extends SlideBaseActivity implements
 			break;
 		default:
 			break;
+		}
+	}
+
+	private void initGameLevelValue(int levelInd) {
+		switch (levelInd) {
+		case 0:
+			mTvGameLevel.setValueContent(mRes
+					.getString(R.string.game_level_values_simple));
+			break;
+
+		case 1:
+			mTvGameLevel.setValueContent(mRes
+					.getString(R.string.game_level_values_medium));
+			break;
+
+		case 2:
+			mTvGameLevel.setValueContent(mRes
+					.getString(R.string.game_level_values_difficult));
+			break;
+
+		default:
+			mTvGameLevel.setValueContent("");
+			break;
+		}
+	}
+
+	private void initShowNoHint(boolean checkWetherUseHint) {
+		// TODO Auto-generated method stub
+
+		if (checkWetherUseHint) {
+			mTvShowNoHint
+					.setValueBkImg(android.R.drawable.checkbox_on_background);
+		} else {
+			mTvShowNoHint
+					.setValueBkImg(android.R.drawable.checkbox_off_background);
 		}
 	}
 }

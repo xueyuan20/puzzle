@@ -177,7 +177,7 @@ public class PuzzleProvider {
 	 */
 	public void deleteRecord(RecordItem record) {
 		if (queryRecord() != null) {
-			mOpenHelper.delete(record);
+			mOpenHelper.deleteRecord(record);
 		}
 	}
 }

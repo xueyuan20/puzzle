@@ -128,4 +128,8 @@ public class RecordItem {
 	public int getId(){
 		return mId;
 	}
+
+	public int getLevel(){
+		return mPuzzleSize-3;
+	}
 }

@@ -20,7 +20,6 @@ public class SlideBaseActivity extends BaseActivity implements
 	@Override
 	public void setContentView(int layoutResID) {
 		// TODO Auto-generated method stub
-		LogUtil.d("[debug] set content view...");
 		super.setContentView(layoutResID);
 	}
 

@@ -33,7 +33,6 @@ public final class UserAgreementActivity extends SlideBaseActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		MobclickAgent.onPageStart("AboutPage");
 		MobclickAgent.onResume(this);
 	}
 
@@ -41,7 +40,6 @@ public final class UserAgreementActivity extends SlideBaseActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		MobclickAgent.onPageEnd("AboutPage");
 		MobclickAgent.onPause(this);
 	}
 }

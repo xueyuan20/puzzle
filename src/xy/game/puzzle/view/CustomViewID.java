@@ -6,9 +6,9 @@ class CustomViewID {
 	static final String TEXT = "custom_text";
 	static final String SRC = "custom_src";
 	static final String BACKGROUND = "custom_background";
+	static final String TEXT_COLOR = "custom_text_color";
+	static final String TEXT_SIZE = "custom_text_size";
 
-	/**
-	 * Setting Item View
-	 */
-	static final String DIR_IMG_SRC = "custom_dir_img_src";
+	static final String DESC_TEXT = "custom_desc_text";
+	static final String DESC_IMG_SRC = "custom_desc_img";
 }
