@@ -1,5 +1,12 @@
 package xy.game.puzzle.logic;
 
+/**
+ * DBOpenHelper class, deal with intertraction between SQLiteDatabase,
+ * including insert, delete, update, query.
+ * @author	80070307
+ * @since	2014-6-25
+ * 
+ */
 import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.RecordItem;
 import android.content.ContentValues;
@@ -22,7 +29,7 @@ class DBOpenHelper extends SQLiteOpenHelper {
 	private final String[] SCORE_COLUMNS = { "_ID", "userName", "score",
 			"stepsCount", "timerCount", "completeFlag", "completeTime", };
 
-	private final String[] TOPS_COLUMNS = { "_ID", "userName", "Level",
+	public final String[] TOPS_COLUMNS = { "_ID", "userName", "Level",
 			"stepsCount", "timerCount", };
 
 	public DBOpenHelper(Context context) {
@@ -104,7 +111,7 @@ class DBOpenHelper extends SQLiteOpenHelper {
 						.getColumnIndex(PUZZLE_COLUMNS[2]));
 			}
 		}
-		cursor = null;
+		cursor.close();
 		return array;
 	}
 
@@ -158,9 +165,11 @@ class DBOpenHelper extends SQLiteOpenHelper {
 					recordItem.setCompleteFlag(cursor.getInt(cursor
 							.getColumnIndex(SCORE_COLUMNS[5])) > 0);
 
+					cursor.close();
 					cursor = null;
 					return recordItem;
 				}
+				cursor.close();
 				cursor = null;
 			}
 		}
@@ -198,6 +207,7 @@ class DBOpenHelper extends SQLiteOpenHelper {
 					values.put(SCORE_COLUMNS[6], scoreRecord.getCompleteTime());
 					db.update(SCORE_TABLE, values, whereClause, whereArgs);
 				}
+				cursor.close();
 				cursor = null;
 			}
 		}
@@ -221,18 +231,23 @@ class DBOpenHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = getWritableDatabase();
 		if (db != null) {
 			ContentValues values = new ContentValues();
-			String userName = record.getUserName();
-			values.put(TOPS_COLUMNS[1], userName);
+			int level = record.getLevel();
+			int topTimeCount = record.getTimerCount();
+			int topStepCount = record.getStepCount();
+			values.put(TOPS_COLUMNS[1], record.getUserName());
 			values.put(TOPS_COLUMNS[2], record.getLevel());
-			values.put(TOPS_COLUMNS[3], record.getStepCount());
-			values.put(TOPS_COLUMNS[4], record.getTimerCount());
-			Cursor cursor = queryTops(userName);
+			values.put(TOPS_COLUMNS[3], topTimeCount);
+			values.put(TOPS_COLUMNS[4], topStepCount);
+			Cursor cursor = checkTopBySteps(level, topStepCount);
 			if ((cursor != null)) {
-				while (cursor.moveToNext()) {
-					String whereClause = TOPS_COLUMNS[1] + "=" + userName;
-					db.update(TOPS_TABLE, values, whereClause, null);
+				cursor.close();
+				cursor = checkTopByTimeCount(level, topTimeCount);
+				if (cursor == null) {
+					db.insertOrThrow(TOPS_TABLE, TOPS_COLUMNS[1], values);
+				} else {
+					cursor.close();
+					cursor = null;
 				}
-				cursor = null;
 			} else {
 				db.insertOrThrow(TOPS_TABLE, TOPS_COLUMNS[1], values);
 			}
@@ -245,7 +260,7 @@ class DBOpenHelper extends SQLiteOpenHelper {
 	 * @param userName
 	 * @return
 	 */
-	public Cursor queryTops(String userName) {
+	Cursor queryTops(String userName) {
 		SQLiteDatabase db = getReadableDatabase();
 		String whereClause = TOPS_COLUMNS[1] + "=" + userName;
 		return db.query(TOPS_TABLE, TOPS_COLUMNS, whereClause, null, null,
@@ -253,15 +268,47 @@ class DBOpenHelper extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * query all top record.
+	 * check whether is better score than other top record by step count.
 	 * 
+	 * @param steps
+	 * @param topStepCount
 	 * @return
 	 */
-	public Cursor queryTops(int level) {
+	Cursor checkTopBySteps(int level, int steps) {
+		SQLiteDatabase db = getReadableDatabase();
+		String whereClause = TOPS_COLUMNS[2] + "=? AND " + TOPS_COLUMNS[3]
+				+ "<?";
+		return db.query(TOPS_TABLE, TOPS_COLUMNS, whereClause, new String[] {
+				String.valueOf(level), String.valueOf(steps) }, null, null,
+				null);
+	}
+
+	/**
+	 * check whether is better score than other top record by time count.
+	 * 
+	 * @param timeCount
+	 * @param topTimeCount
+	 * @return
+	 */
+	Cursor checkTopByTimeCount(int level, int timeCount) {
+		SQLiteDatabase db = getReadableDatabase();
+		String whereClause = TOPS_COLUMNS[2] + "=? AND " + TOPS_COLUMNS[4]
+				+ "<?";
+		return db.query(TOPS_TABLE, TOPS_COLUMNS, whereClause, new String[] {
+				String.valueOf(level), String.valueOf(timeCount) }, null, null,
+				null);
+	}
+
+	/**
+	 * query all top record by level.
+	 * 
+	 * @param level
+	 * @return
+	 */
+	Cursor queryTops(int level) {
 		SQLiteDatabase db = getReadableDatabase();
 		String whereClause = TOPS_COLUMNS[2] + "=?";
 		return db.query(TOPS_TABLE, TOPS_COLUMNS, whereClause,
 				new String[] { String.valueOf(level) }, null, null, null);
 	}
-
 }

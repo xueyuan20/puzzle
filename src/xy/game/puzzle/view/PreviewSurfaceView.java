@@ -23,7 +23,6 @@ import android.view.SurfaceView;
 
 public class PreviewSurfaceView extends SurfaceView implements Callback,
 		Runnable {
-	private final String BG_RES_ID = "backgroundResId";
 	private final String LEVEL = "puzzleLevel";
 	private final String USE_DEFAULT = "userDefaultBmp";
 
@@ -40,8 +39,6 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 
 	private static int mScreenHeight;
 	private static int mScreenWidth;
-
-	private int mBackgroudResId = -1;
 
 	/**
 	 * Grid count.
@@ -74,8 +71,6 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		// TODO Auto-generated constructor stub
 		initSurfaceView(context);
 		mPuzzleSize += (attrs.getAttributeResourceValue(null, LEVEL, 0) % 3);
-		mBackgroudResId = attrs.getAttributeResourceValue(null, BG_RES_ID, 0);
-
 		mUseDefaultBmp = attrs.getAttributeResourceValue(null, USE_DEFAULT, 1) > 0;
 	}
 
@@ -225,22 +220,18 @@ public class PreviewSurfaceView extends SurfaceView implements Callback,
 		switch (provider.getGameLevel()) {
 		case 0:
 			mPuzzleSize = 3;
-			mBackgroudResId = R.drawable.background_33;
 			break;
 
 		case 1:
 			mPuzzleSize = 4;
-			mBackgroudResId = R.drawable.background_44;
 			break;
 
 		case 2:
 			mPuzzleSize = 5;
-			mBackgroudResId = R.drawable.background_55;
 			break;
 
 		default:
 			mPuzzleSize = 3;
-			mBackgroudResId = R.drawable.background_33;
 			break;
 		}
 		if (!provider.checkUseDefaultBk()) {

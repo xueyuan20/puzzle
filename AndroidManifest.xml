@@ -24,7 +24,8 @@
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@style/NoTitleAppTheme" >
 
         <!-- umeng sdk statistic -->
         <meta-data
@@ -57,26 +58,15 @@
             android:theme="@style/FullscreenPage" />
 
         <!-- Subpage: About -->
-        <activity
-            android:name="xy.game.puzzle.activity.SettingsActivity"
-            android:icon="@drawable/selector_back"
-            android:label="@string/title_settings"
-            android:theme="@style/AppTheme" />
+        <activity android:name="xy.game.puzzle.activity.SettingsActivity" />
+        <activity android:name="xy.game.puzzle.activity.TopsActivity"/>
 
         <!-- Subpage: User Agreement -->
-        <activity
-            android:name="xy.game.puzzle.activity.UserAgreementActivity"
-            android:icon="@drawable/selector_back"
-            android:label="@string/appdescription"
-            android:theme="@style/AppTheme" />
+        <activity android:name="xy.game.puzzle.activity.UserAgreementActivity" />
 
         <!-- 用户反馈-开始 -->
-        <activity
-            android:name="com.umeng.fb.ConversationActivity"
-            android:theme="@style/NoTitleAppTheme" />
-        <activity
-            android:name="com.umeng.fb.ContactActivity"
-            android:theme="@style/NoTitleAppTheme" />
+        <activity android:name="com.umeng.fb.ConversationActivity" />
+        <activity android:name="com.umeng.fb.ContactActivity" />
         <!-- 用户反馈-结束 -->
 
 

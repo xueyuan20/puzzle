@@ -9,6 +9,8 @@ import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.MessageUtils;
 import xy.game.puzzle.util.ScreenUtil;
 import xy.game.puzzle.util.StorageUtil;
+import xy.game.puzzle.view.CustomTitleBar;
+import xy.game.puzzle.view.CustomTitleBar.OnBackClicked;
 import xy.game.puzzle.view.FloatMenuItem;
 import xy.game.puzzle.view.PreviewSurfaceView;
 import android.app.AlertDialog;
@@ -26,17 +28,16 @@ import android.provider.MediaStore.Images;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
 public final class PreviewActivity extends BaseActivity implements
-		OnClickListener {
+		OnClickListener, OnBackClicked {
 	private boolean mPreviewModeFlag = false;
 	private FloatMenuItem[] mMenuArray;
 	// private ImageView mIvPreview;
 	private PreviewSurfaceView mSvPreview;
-	private TextView mTvPageTitle;
+	private CustomTitleBar mTvPageTitle;
 	private String mFileName;
 	private String mFilePath;
 
@@ -54,7 +55,8 @@ public final class PreviewActivity extends BaseActivity implements
 
 		// mIvPreview = (ImageView) findViewById(R.id.iv_preview);
 		mSvPreview = (PreviewSurfaceView) findViewById(R.id.preview);
-		mTvPageTitle = (TextView) findViewById(R.id.page_title);
+		mTvPageTitle = (CustomTitleBar) findViewById(R.id.page_title);
+		mTvPageTitle.setListener(this);
 
 		Intent intent = getIntent();
 		if ((intent != null) && (intent.getExtras() != null)) {
@@ -251,5 +253,11 @@ public final class PreviewActivity extends BaseActivity implements
 
 	public boolean checkPreviewMode() {
 		return mPreviewModeFlag;
+	}
+
+	@Override
+	public void onBack() {
+		// TODO Auto-generated method stub
+		finish();
 	}
 }

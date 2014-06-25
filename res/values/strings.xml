@@ -64,8 +64,18 @@
     <string name="title_settings_gamelevel">"游戏等级"</string>
     <string name="umeng_image_desc">"umeng"</string>
 
-    <string name="update_checking">"更新检查最新版本信息..."</string>
+    <string name="update_checking">"更新检查最新版本信息."</string>
     <string name="update_no_new">"当前已是最新版本"</string>
 
     <string name="clear_cache_hint">"清除Cache, 可能导致拼图背景图异常，需要手动重新获取"</string>
+
+	<string name="title_game_tops">"排行榜"</string>
+	<string name="title_sort_type">"排序"</string>
+	<string name="title_choose_sort">"请选择排序方式"</string>
+	<string-array name="sort_type_choices">
+	    <item name="sort_type_step">"按步数排序"</item>
+	    <item name="sort_type_time">"按时间排序"</item>
+	</string-array>
+	<string name="title_set_username">"设置用户名"</string>
+	<string name="default_username">"拼图达人"</string>
 </resources>

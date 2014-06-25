@@ -4,8 +4,11 @@ import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.util.StorageUtil;
 import xy.game.puzzle.view.CustomIconView;
+import xy.game.puzzle.view.CustomTitleBar;
+import xy.game.puzzle.view.CustomTitleBar.OnBackClicked;
 import xy.game.puzzle.view.CustomToast;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +16,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
@@ -22,10 +27,10 @@ import com.umeng.update.UpdateResponse;
 import com.umeng.update.UpdateStatus;
 
 public final class SettingsActivity extends SlideBaseActivity implements
-		OnClickListener {
+		OnClickListener, OnBackClicked {
 	private Context mContext;
-	private CustomIconView mTvGameLevel, mTvScoreTops, mTvShowNoHint,
-			mTvClearCache;
+	private CustomIconView mTvGameLevel, mTvScoreTops, mTvShowNoHint;
+	private CustomIconView mTvSetUserName, mTvClearCache;
 	private CustomIconView mTvUpdate, mTvFeedback;
 	private CustomIconView mTvAppdesc;
 	private CustomToast mCustomToast;
@@ -42,6 +47,15 @@ public final class SettingsActivity extends SlideBaseActivity implements
 		setContentView(R.layout.activity_settings);
 		mContext = this;
 		mProvider = PuzzleProvider.getInstance(mContext);
+
+		((CustomTitleBar) findViewById(R.id.title)).setListener(this);
+
+		mTvSetUserName = (CustomIconView) findViewById(R.id.tv_set_username);
+		mTvSetUserName.setOnClickListener(this);
+		if (mProvider.getUserName() != null) {
+			mTvSetUserName.setValueContent(mProvider.getUserName());
+		}
+
 		mTvGameLevel = (CustomIconView) findViewById(R.id.tv_set_level);
 		mTvGameLevel.setOnClickListener(this);
 		initGameLevelValue(mProvider.getGameLevel());
@@ -97,6 +111,30 @@ public final class SettingsActivity extends SlideBaseActivity implements
 	public void onClick(View view) {
 		// TODO Auto-generated method stub
 		switch (view.getId()) {
+		case R.id.tv_set_username:
+			// 修改用户名
+			EditDialog dlg = new EditDialog(mContext);
+			dlg.setTitle(mRes.getString(R.string.title_set_username));
+			dlg.setListener(new OnDialogClicked() {
+
+				@Override
+				public void onClickOk(String input) {
+					// TODO Auto-generated method stub
+					mProvider.setUserName(input);
+				}
+
+				@Override
+				public void onClickCancle() {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			dlg.show();
+			String userName = mProvider.getUserName() == null ? mRes
+					.getString(R.string.default_username) : mProvider
+					.getUserName();
+			dlg.setHint(userName);
+			break;
 		case R.id.tv_set_level:
 			new AlertDialog.Builder(mContext)
 					.setTitle(mRes.getString(R.string.title_game_level))
@@ -118,6 +156,7 @@ public final class SettingsActivity extends SlideBaseActivity implements
 			break;
 		case R.id.tv_top_score:
 			// not realize.
+			startActivity(new Intent(mContext, TopsActivity.class));
 			break;
 		case R.id.tv_set_numhint:
 			boolean showHint = !mProvider.checkWetherUseHint();
@@ -237,4 +276,75 @@ public final class SettingsActivity extends SlideBaseActivity implements
 					.setValueBkImg(android.R.drawable.checkbox_off_background);
 		}
 	}
+
+	@Override
+	public void onBack() {
+		// TODO Auto-generated method stub
+		finish();
+	}
+
+	class EditDialog extends Dialog implements View.OnClickListener {
+		private EditText mInput;
+		private Button mButtonOk, mButtonCancle;
+		private OnDialogClicked mListener;
+
+		public EditDialog(Context context) {
+			super(context);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.dialog_edit);
+			mInput = (EditText) findViewById(R.id.input);
+			mButtonOk = (Button) findViewById(R.id.ok);
+			mButtonOk.setOnClickListener(this);
+			mButtonCancle = (Button) findViewById(R.id.cancle);
+			mButtonCancle.setOnClickListener(this);
+		}
+
+		@Override
+		public void setTitle(CharSequence title) {
+			// TODO Auto-generated method stub
+			super.setTitle(title);
+		}
+
+		public void setHint(CharSequence hint) {
+			mInput.setHint(hint);
+		}
+
+		public void setListener(OnDialogClicked listener) {
+			mListener = listener;
+		}
+
+		@Override
+		public void onClick(View view) {
+			// TODO Auto-generated method stub
+			switch (view.getId()) {
+			case R.id.ok:
+				if (mListener != null) {
+					mListener.onClickOk(mInput.getText().toString());
+				}
+				dismiss();
+				break;
+
+			case R.id.cancle:
+				if (mListener != null) {
+					mListener.onClickCancle();
+				}
+				dismiss();
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+}
+
+interface OnDialogClicked {
+	public void onClickOk(String input);
+	public void onClickCancle();
 }

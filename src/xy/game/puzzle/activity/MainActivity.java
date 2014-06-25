@@ -1,7 +1,5 @@
 package xy.game.puzzle.activity;
 
-import com.umeng.analytics.MobclickAgent;
-
 import xy.game.puzzle.R;
 import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.logic.ScreenShotAsyncTask;
@@ -25,6 +23,8 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.umeng.analytics.MobclickAgent;
 
 public final class MainActivity extends BaseActivity implements OnClickListener {
 	private ImageView mTvMore, mTvHint;
@@ -164,6 +164,7 @@ public final class MainActivity extends BaseActivity implements OnClickListener 
 
 	private void initViews() {
 		// TODO Auto-generated method stub
+
 		mPuzzleView = (PuzzleSurfaceView) findViewById(R.id.puzzle_surfaceview);
 		mPuzzleView.setShowHint(mProvider.checkUseDefaultBk());
 
@@ -299,5 +300,4 @@ public final class MainActivity extends BaseActivity implements OnClickListener 
 	public void stopTimer() {
 		mEnableTimer = false;
 	}
-
 }

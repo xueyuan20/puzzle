@@ -8,7 +8,6 @@
         android:id="@+id/preview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        backgroundResId="@drawable/background_33"
         previewMode="0"
         puzzleLevel="0"
         userDefaultBmp="1" />
