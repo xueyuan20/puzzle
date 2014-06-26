@@ -1,6 +1,7 @@
 package xy.game.puzzle.util;
 
 import xy.game.puzzle.logic.Processor;
+import xy.game.puzzle.logic.PuzzleProvider;
 
 /**
  * 成绩记录类
@@ -11,6 +12,11 @@ import xy.game.puzzle.logic.Processor;
 
 public class RecordItem {
 	private int mId;
+
+	/**
+	 * player's name.
+	 */
+	private String mUserName;
 
 	/**
 	 * 计步器
@@ -96,9 +102,13 @@ public class RecordItem {
 		return mTotalScore;
 	}
 
+	public void setUserName(String userName){
+		mUserName = userName;
+	}
+
 	public String getUserName() {
 		// TODO Auto-generated method stub
-		return "testUser";
+		return mUserName;
 	}
 
 	public void setCompleteFlag(boolean complete){

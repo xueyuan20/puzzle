@@ -113,27 +113,28 @@ public final class SettingsActivity extends SlideBaseActivity implements
 		switch (view.getId()) {
 		case R.id.tv_set_username:
 			// 修改用户名
-			EditDialog dlg = new EditDialog(mContext);
-			dlg.setTitle(mRes.getString(R.string.title_set_username));
+			CustomEditDialog dlg = new CustomEditDialog(mContext);
+			dlg.setDialogTitle(mRes.getString(R.string.title_set_username));
+			String userName = mProvider.getUserName() == null ? mRes
+					.getString(R.string.default_username) : mProvider
+					.getUserName();
+			dlg.setContent(userName);
 			dlg.setListener(new OnDialogClicked() {
 
 				@Override
 				public void onClickOk(String input) {
 					// TODO Auto-generated method stub
 					mProvider.setUserName(input);
+					mTvSetUserName.setValueContent(input);
 				}
 
 				@Override
 				public void onClickCancle() {
 					// TODO Auto-generated method stub
-
+					// Not deal with anything.
 				}
 			});
 			dlg.show();
-			String userName = mProvider.getUserName() == null ? mRes
-					.getString(R.string.default_username) : mProvider
-					.getUserName();
-			dlg.setHint(userName);
 			break;
 		case R.id.tv_set_level:
 			new AlertDialog.Builder(mContext)
@@ -283,12 +284,13 @@ public final class SettingsActivity extends SlideBaseActivity implements
 		finish();
 	}
 
-	class EditDialog extends Dialog implements View.OnClickListener {
+	class CustomEditDialog extends Dialog implements View.OnClickListener {
 		private EditText mInput;
 		private Button mButtonOk, mButtonCancle;
 		private OnDialogClicked mListener;
+		String mTitle, mContent;
 
-		public EditDialog(Context context) {
+		public CustomEditDialog(Context context) {
 			super(context);
 			// TODO Auto-generated constructor stub
 		}
@@ -298,21 +300,25 @@ public final class SettingsActivity extends SlideBaseActivity implements
 			// TODO Auto-generated method stub
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.dialog_edit);
+			setTitle(mTitle);
+
 			mInput = (EditText) findViewById(R.id.input);
+			mInput.setText(mContent);
+			
+
 			mButtonOk = (Button) findViewById(R.id.ok);
 			mButtonOk.setOnClickListener(this);
 			mButtonCancle = (Button) findViewById(R.id.cancle);
 			mButtonCancle.setOnClickListener(this);
 		}
 
-		@Override
-		public void setTitle(CharSequence title) {
+		public void setDialogTitle(String title) {
 			// TODO Auto-generated method stub
-			super.setTitle(title);
+			mTitle = title;
 		}
 
-		public void setHint(CharSequence hint) {
-			mInput.setHint(hint);
+		public void setContent(String content) {
+			mContent = content;
 		}
 
 		public void setListener(OnDialogClicked listener) {
@@ -346,5 +352,6 @@ public final class SettingsActivity extends SlideBaseActivity implements
 
 interface OnDialogClicked {
 	public void onClickOk(String input);
+
 	public void onClickCancle();
 }

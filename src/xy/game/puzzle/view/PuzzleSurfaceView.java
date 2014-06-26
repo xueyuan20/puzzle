@@ -10,6 +10,7 @@ import xy.game.puzzle.util.MessageUtils;
 import xy.game.puzzle.util.Position;
 import xy.game.puzzle.util.RecordItem;
 import xy.game.puzzle.util.ScreenUtil;
+import xy.game.puzzle.util.TopRecord;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -228,15 +229,15 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 											mBmpPaint[mUnitIndexArray[i]],
 											mUnitRectArray[i].left(),
 											mUnitRectArray[i].top(), mPaint);
-									if (mShowHint) {										
+									if (mShowHint) {
 										mCanvas.drawText(
 												String.valueOf(mUnitIndexArray[i]),
 												mUnitRectArray[i].getRect()
-												.centerX(),
+														.centerX(),
 												mUnitRectArray[i].getRect()
-												.centerY()
-												+ mPaint.getTextSize() / 3,
-												mPaint);
+														.centerY()
+														+ mPaint.getTextSize()
+														/ 3, mPaint);
 									}
 								}
 							}
@@ -377,6 +378,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 						mScoreRecord.getStepCount());
 				Message msg = new Message();
 				msg.what = MessageUtils.MSG_RESULT;
+				msg.obj = mScoreRecord;
 				msg.getData().putString(MessageUtils.KEY_RESULT_CONTENT,
 						content);
 				((MainActivity) mContext).getHandler().dispatchMessage(msg);
@@ -449,7 +451,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 	private void initPuzzle(boolean isNew) {
 		PuzzleProvider provider = PuzzleProvider.getInstance(mContext);
 		mShowHint = provider.checkWetherUseHint();
-		
+
 		/**
 		 * initialize puzzle size.
 		 */
@@ -533,6 +535,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 		mScoreRecord = provider.queryRecord();
 		if (mScoreRecord == null) {
 			mScoreRecord = new RecordItem(mPuzzleSize, 0, 0);
+			mScoreRecord.setUserName(provider.getUserName());
 			updateStepsView(0);
 		} else {
 			updateStepsView(mScoreRecord.getStepCount());
@@ -779,7 +782,7 @@ public class PuzzleSurfaceView extends SurfaceView implements Callback,
 				mScoreRecord);
 	}
 
-	public void setShowHint(Boolean showHint){
+	public void setShowHint(Boolean showHint) {
 		mShowHint = showHint;
 	}
 }

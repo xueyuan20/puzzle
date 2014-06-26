@@ -10,7 +10,7 @@ import java.util.Random;
 public class Processor {
 
 	private static int[] mIndexArray;
-	private static final int LOOP_RADIO = 30;
+	private static final int LOOP_RADIO = 0;
 	/**
 	 * Generator random sequences.
 	 * @param length, length of sequences.

@@ -5,7 +5,9 @@ import xy.game.puzzle.logic.PuzzleProvider;
 import xy.game.puzzle.logic.ScreenShotAsyncTask;
 import xy.game.puzzle.util.LogUtil;
 import xy.game.puzzle.util.MessageUtils;
+import xy.game.puzzle.util.RecordItem;
 import xy.game.puzzle.util.ScreenUtil;
+import xy.game.puzzle.util.TopRecord;
 import xy.game.puzzle.view.PuzzleSurfaceView;
 import xy.game.puzzle.view.PuzzleSurfaceView.DIFFICULTY_LEVEL;
 import android.app.AlertDialog;
@@ -60,6 +62,18 @@ public final class MainActivity extends BaseActivity implements OnClickListener 
 			case MessageUtils.MSG_RESULT:
 				mResultContent = msg.getData().getString(
 						MessageUtils.KEY_RESULT_CONTENT);
+				RecordItem record = (RecordItem) msg.obj;
+				boolean isNewTop = false;
+				LogUtil.e("XUEYUAN, [test params]" + record);
+				if ((record != null) && (record.getStepCount() > 0)
+						&& (record.getTimerCount() > 0)) {
+					isNewTop = mProvider.insertTopRecord(record);
+					LogUtil.e("XUEYUAN, [test params]" + record.getStepCount()
+							+ "; " + record.getTimerCount() + "; " + isNewTop);
+				}
+				if (isNewTop) {
+					mResultContent = "[new]" + mResultContent;
+				}
 				new AlertDialog.Builder(MainActivity.this)
 						.setTitle(mRes.getString(R.string.result_title))
 						.setMessage(mResultContent)

@@ -70,20 +70,37 @@ public class PuzzleProvider {
 		}
 	}
 
+	/**
+	 * Called to set player's name.
+	 * @param userName
+	 */
 	public void setUserName(String userName) {
 		mEditor.putString(KEY_USER_NAME, userName);
 		mEditor.commit();
 	}
 
+	/**
+	 * Called to get player's name.
+	 * @return
+	 */
 	public String getUserName() {
-		return mSharedPrefs.getString(KEY_USER_NAME, null);
+		return mSharedPrefs.getString(KEY_USER_NAME, mContext.getResources()
+				.getString(R.string.default_username));
 	}
 
+	/**
+	 * Called to change whether to show number hint.
+	 * @param showHint
+	 */
 	public void changeHintType(boolean showHint) {
 		mEditor.putBoolean(KEY_WETHER_USE_HINT, showHint);
 		mEditor.commit();
 	}
 
+	/**
+	 * Called to check whether to show number hint.
+	 * @return
+	 */
 	public boolean checkWetherUseHint() {
 		return mSharedPrefs.getBoolean(KEY_WETHER_USE_HINT, false);
 	}
@@ -205,5 +222,12 @@ public class PuzzleProvider {
 	 */
 	public Cursor queryTopByLevel(int level) {
 		return mOpenHelper.queryTops(level);
+	}
+
+	/**
+	 * Called to insert top record.
+	 */
+	public boolean insertTopRecord(RecordItem record){
+		return mOpenHelper.insertTopRecord(record);
 	}
 }

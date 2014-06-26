@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <xy.game.puzzle.view.CustomTitleBar
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_alignParentTop="true"
+        custom_text="@string/title_game_tops"
+        custom_text_color="@color/title_text_color"
+        custom_text_size="@dimen/title_text_size" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/title_height"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical" >
+
+            <TextView 
+                android:id="@+id/sort_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_tab_background"
+                android:text="@string/title_sort_type"/>
+
+            <TextView
+                android:id="@+id/level_simple"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_height"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tab_background"
+                android:text="@string/game_level_values_simple" />
+
+            <TextView
+                android:id="@+id/level_medium"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_height"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tab_background"
+                android:text="@string/game_level_values_medium" />
+
+            <TextView
+                android:id="@+id/level_difficult"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_height"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tab_background"
+                android:text="@string/game_level_values_difficult" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>
