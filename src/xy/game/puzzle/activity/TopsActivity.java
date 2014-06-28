@@ -28,7 +28,7 @@ public class TopsActivity extends SlideBaseActivity implements OnBackClicked,
 	private Context mContext;
 	private Resources mRes;
 	private int mSelectLevel;
-	private ArrayList<TopRecord> mTopsRecord;
+	private ArrayList<TopRecord> mTopsRecordByStep, mTopsRecordByTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -138,23 +138,31 @@ public class TopsActivity extends SlideBaseActivity implements OnBackClicked,
 
 		Cursor cursor = mProvider.queryTopByLevel(mSelectLevel);
 		if (cursor != null) {
-			if (mTopsRecord != null) {
-				mTopsRecord.clear();
+			if (mTopsRecordByStep != null) {
+				mTopsRecordByStep.clear();
+			} else {
+				mTopsRecordByStep = new ArrayList<TopRecord>();
+			}
+
+			if (mTopsRecordByTime != null) {
+				mTopsRecordByTime.clear();
+			} else {
+				mTopsRecordByTime = new ArrayList<TopRecord>();
 			}
 			TopRecord record;
 			while (cursor.moveToNext()) {
 				record = new TopRecord(cursor.getString(1), cursor.getInt(3),
 						cursor.getInt(4));
-				Log.e("XUEYUAN", record.toString());
-				mTopsRecord.add(record);
+				Log.e("XUEYUAN", "Level index : " + record.toString());
+				mTopsRecordByStep.add(record);
+				if (index == 0) {
+					// 按步数排序
+
+				} else {
+					// 按时间排序
+				}
 			}
 
-			if (index == 0) {
-				// 按步数排序
-
-			} else {
-				// 按时间排序
-			}
 			cursor.close();
 		}
 	}
